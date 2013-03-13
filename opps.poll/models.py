@@ -2,6 +2,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from tagging.fields import TagField
+
 from opps.core.models import Publishable
 from opps.channel.models import Channel
 from opps.image.models import Image
@@ -29,6 +31,7 @@ class Poll(Publishable):
 
 
 class Choice(models.Model):
+
     poll = models.ForeignKey(Poll)
     choice = models.CharField(max_length=255)
     votes = models.IntegerField()
