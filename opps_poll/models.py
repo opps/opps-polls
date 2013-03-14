@@ -6,6 +6,7 @@ from tagging.fields import TagField
 
 from opps.core.models import Publishable
 from opps.channel.models import Channel
+from opps.article.models import Post
 from opps.image.models import Image
 
 
@@ -19,18 +20,37 @@ class Poll(Publishable):
                             db_index=True)
 
     headline = models.TextField(_(u"Headline"), blank=True)
-    channel = models.ForeignKey(Channel, verbose_name=_(u"Channel"))
+
+    channel = models.ForeignKey(Channel, null=True, blank=True,
+                                on_delete=models.SET_NULL)
+    posts = models.ManyToManyField(Post, null=True, blank=True,
+                                   related_name='poll_post',
+                                   through='PollPost')
 
     main_image = models.ForeignKey(Image,
                                    verbose_name=_(u'Poll Image'), blank=True,
                                    null=True, on_delete=models.SET_NULL,
                                    related_name='poll_image')
+
     tags = TagField(null=True, verbose_name=_(u"Tags"))
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
     position  = models.IntegerField(_(u"Position"), default=0)
 
     def __unicode__(self):
         return self.question
+
+
+class PollPost(models.Model):
+    post = models.ForeignKey(Post, verbose_name=_(u'Poll Post'), null=True,
+                             blank=True, related_name='pollpost_post',
+                             on_delete=models.SET_NULL)
+    poll = models.ForeignKey(Poll, verbose_name=_(u'Poll'), null=True,
+                                   blank=True, related_name='poll',
+                                   on_delete=models.SET_NULL)
+
+
+    def __unicode__(self):
+        return "{0}-{1}".format(self.poll.slug, self.post.slug)
 
 
 class Choice(models.Model):

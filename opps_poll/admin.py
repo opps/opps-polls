@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from opps_poll.models import Poll, Choice
+from opps_poll.models import Poll, Choice, PollPost
 
 from redactor.widgets import RedactorEditor
 
@@ -24,6 +24,15 @@ class ChoiceInline(admin.TabularInline):
     fieldsets = [(None, {'fields': ('choice', 'image', 'position', 'votes')})]
 
 
+class PollPostInline(admin.TabularInline):
+    model = PollPost
+    fk_name = 'poll'
+    raw_id_fields = ['post']
+    actions = None
+    extra = 1
+    classes = ('collapse',)
+
+
 class PollAdmin(admin.ModelAdmin):
     form = PollAdminForm
     prepopulated_fields = {"slug": ["question"]}
@@ -32,7 +41,7 @@ class PollAdmin(admin.ModelAdmin):
     search_fields = ["question", "headline"]
     exclude = ('user',)
     raw_id_fields = ['main_image', 'channel']
-    inlines = [ChoiceInline]
+    inlines = [ChoiceInline, PollPostInline]
 
     fieldsets = (
         (_(u'Identification'), {
