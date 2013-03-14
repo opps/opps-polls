@@ -20,7 +20,7 @@ class PollList(ListView):
             return None
         long_slug = self.kwargs.get('channel__long_slug',
                                     homepage.long_slug)
-        return 'channel/opps_poll/{0}.html'.format(long_slug)
+        return 'opps_poll/{0}.html'.format(long_slug)
 
     @property
     def queryset(self):
@@ -41,7 +41,7 @@ class PollDetail(DetailView):
         if not homepage:
             return None
         long_slug = self.kwargs.get('channel__long_slug', 'default')
-        return 'channel/opps_poll/{0}/{1}.html'.format(long_slug, self.kwargs['slug'])
+        return 'opps_poll/{0}/{1}.html'.format(long_slug, self.kwargs['slug'])
 
     @property
     def queryset(self):
