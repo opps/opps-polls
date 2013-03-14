@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from tagging.fields import TagField
@@ -35,6 +36,12 @@ class Poll(Publishable):
     tags = TagField(null=True, verbose_name=_(u"Tags"))
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
     position  = models.IntegerField(_(u"Position"), default=0)
+
+    @property
+    def is_opened(self):
+        if not self.date_end:
+            return True
+        return self.date_end
 
     def __unicode__(self):
         return self.question

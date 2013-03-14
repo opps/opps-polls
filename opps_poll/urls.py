@@ -3,14 +3,15 @@
 #
 from django.conf.urls import patterns, url
 
-from opps_poll.views import PollDetail, PollList
+from opps_poll.views import PollDetail, PollList, ChannelPollList
 
 
 urlpatterns = patterns(
     '',
     url(r'^$', PollList.as_view(), name='poll_list'),
-    url(r'^(?P<channel__long_slug>[\w//-]+)/(?P<slug>[\w-]+)$',
-        PollDetail.as_view(), name='open_poll'),
-    url(r'^(?P<channel__long_slug>[\w//-]+)$', PollList.as_view(),
+    url(r'^channel/(?P<channel__long_slug>[\w//-]+)$', ChannelPollList.as_view(),
         name='channel_poll'),
+    url(r'^(?P<slug>[\w-]+)$',
+        PollDetail.as_view(), name='open_poll'),
+
 )
