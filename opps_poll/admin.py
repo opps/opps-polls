@@ -4,5 +4,58 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+from opps_poll.models import Poll, Choice
 
 from redactor.widgets import RedactorEditor
+
+
+class PollAdminForm(forms.ModelForm):
+    class Meta:
+        model = Poll
+        widgets = {"headline": RedactorEditor()}
+
+
+class ChoiceInline(admin.TabularInline):
+    model = Choice
+    fk_name = 'poll'
+    raw_id_fields = ['image']
+    action = None
+    extra = 1
+    fieldsets = [(None, {'fields': ('choice', 'image', 'position', 'votes')})]
+
+
+class PollAdmin(admin.ModelAdmin):
+    form = PollAdminForm
+    prepopulated_fields = {"slug": ["question"]}
+    list_display = ['question', 'channel', 'date_available', 'date_end', 'published']
+    list_filter = ["date_end", "date_available", "published", "channel"]
+    search_fields = ["question", "headline"]
+    exclude = ('user',)
+    raw_id_fields = ['main_image', 'channel']
+    inlines = [ChoiceInline]
+
+    fieldsets = (
+        (_(u'Identification'), {
+            'fields': ('question', 'slug')}),
+        (_(u'Content'), {
+            'fields': ('headline', 'main_image', 'tags')}),
+        (_(u'Relationships'), {
+            'fields': ('channel',)}),
+        (_(u'Publication'), {
+            'classes': ('extrapretty'),
+            'fields': ('published', 'date_available', 'date_end',
+                'position', 'multiple_choices')}),
+    )
+
+    def save_model(self, request, obj, form, change):
+        try:
+            obj.site = obj.channel.site
+            if obj.user:
+                pass
+        except User.DoesNotExist:
+            obj.user = request.user
+
+        super(PollAdmin, self).save_model(request, obj, form, change)
+
+
+admin.site.register(Poll, PollAdmin)

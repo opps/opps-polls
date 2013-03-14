@@ -12,7 +12,8 @@ from opps.image.models import Image
 class Poll(Publishable):
 
     question = models.CharField(_(u"Question"), max_length=255)
-    multiple_choices = models.BooleanField(_(u"Allow multiple choices"), default=False)
+    multiple_choices = models.BooleanField(_(u"Allow multiple choices"),
+        default=False)
 
     slug = models.SlugField(_(u"URL"), max_length=150, unique=True,
                             db_index=True)
@@ -21,10 +22,12 @@ class Poll(Publishable):
     channel = models.ForeignKey(Channel, verbose_name=_(u"Channel"))
 
     main_image = models.ForeignKey(Image,
-                                   verbose_name=_(u'Poll Image'), blank=False,
+                                   verbose_name=_(u'Poll Image'), blank=True,
                                    null=True, on_delete=models.SET_NULL,
                                    related_name='poll_image')
     tags = TagField(null=True, verbose_name=_(u"Tags"))
+    date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
+    position  = models.IntegerField(_(u"Position"), default=0)
 
     def __unicode__(self):
         return self.question
@@ -33,12 +36,13 @@ class Poll(Publishable):
 class Choice(models.Model):
 
     poll = models.ForeignKey(Poll)
-    choice = models.CharField(max_length=255)
-    votes = models.IntegerField()
+    choice = models.CharField(max_length=255, null=False, blank=False)
+    votes = models.IntegerField(null=True, blank=True)
     image = models.ForeignKey(Image,
-                            verbose_name=_(u'Choice Image'), blank=False,
+                            verbose_name=_(u'Choice Image'), blank=True,
                             null=True, on_delete=models.SET_NULL,
                             related_name='choice_image')
+    position  = models.IntegerField(_(u"Position"), default=0)
 
     def __unicode__(self):
         return self.choice
