@@ -1,1 +1,12 @@
-<!-- list of polls -->
+{% load thumbor_tags %}
+Opps Poll
+
+<ul>
+  {% for poll in context %}
+  <li>
+    <img src="{% thumbor_url poll.main_image.image.url width=10 %}" />
+    <a href="{% url 'open_poll' poll.channel.long_slug poll.slug %}" alt="{{ poll.question }}">{{ poll.question }}</a>
+  </li>
+  {% endfor %}
+</ul>
+

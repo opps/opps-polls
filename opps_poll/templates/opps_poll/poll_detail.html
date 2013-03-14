@@ -1,1 +1,16 @@
-<!-- poll details and vote -->
+{% load thumbor_tags %}
+Opps Poll
+
+<h1>{{ context.question }}</h1>
+<div>{{ context.headline|safe }}</div>
+<img src="{% thumbor_url poll.main_image.image.url width=100 %}" />
+
+<h2> Choices </h2>
+
+<ul>
+{% for choice in context.choice_set.all %}
+
+  <li>{{choice}}</li>
+
+{% endfor %}
+</ul>

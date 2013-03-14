@@ -37,7 +37,7 @@ class Choice(models.Model):
 
     poll = models.ForeignKey(Poll)
     choice = models.CharField(max_length=255, null=False, blank=False)
-    votes = models.IntegerField(null=True, blank=True)
+    votes = models.IntegerField(null=True, blank=True, default=0)
     image = models.ForeignKey(Image,
                             verbose_name=_(u'Choice Image'), blank=True,
                             null=True, on_delete=models.SET_NULL,
