@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from opps.channel.models import Channel
 from opps_poll.models import Poll, Choice
@@ -39,9 +40,10 @@ class ChannelPollList(ListView):
         long_slug = self.kwargs['channel__long_slug'][:-1]
         get_object_or_404(Channel, long_slug=long_slug)
         return Poll.objects.filter(
-               channel__long_slug=long_slug,
-               published=True
-            )
+                   channel__long_slug=long_slug,
+                   published=True,
+                   date_available__lte=timezone.now()
+               )
 
 
 
@@ -57,6 +59,12 @@ class PollDetail(DetailView):
         a list. May not be called if get_template is overridden.
         """
         names = []#super(PollDetail, self).get_template_names()
+
+        if not self.object.is_opened:
+            self.template_name_suffix = "_result"
+
+        if self.voted:
+            self.template_name_suffix = "_voted"
 
         if hasattr(self.object, '_meta'):
             app_label = self.object._meta.app_label
@@ -113,7 +121,13 @@ class PollDetail(DetailView):
         return names
 
     def get_object(self):
-        return get_object_or_404(Poll, slug=self.kwargs['slug'], published=True)
+        self.voted = False
+        return get_object_or_404(
+                   Poll,
+                   slug=self.kwargs['slug'],
+                   published=True,
+                   date_available__lte=timezone.now()
+               )
 
     # def get(self, request, *args, **kwargs):
     #     self.object = self.get_object()
@@ -126,4 +140,9 @@ class PollDetail(DetailView):
         print request.GET, request.POST
         self.object = self.get_object()
         context = self.get_context_data(**kwargs)
+        if not request.POST.get('choices'):
+            context['error'] = _(u"You should select at least one option")
+            return self.render_to_response(context)
+
+        self.voted = context['voted'] = self.object.vote(request)
         return self.render_to_response(context)

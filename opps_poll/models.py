@@ -60,6 +60,20 @@ class Poll(Publishable):
         else:
             return SingleChoiceForm(self.choices, self.display_choice_images, *args, **kwargs)
 
+    def vote(self, request):
+        try:
+            choice_ids = request.POST.getlist('choices')
+        except:
+            choices_ids = (request.POST.get('choices'),)
+
+        choices = [Choice.objects.get(pk=int(choice_id)) for choice_id in choice_ids]
+
+        for choice in choices:
+            choice.vote()
+            choice.save()
+
+        return choices
+
     def __unicode__(self):
         return self.question
 
@@ -93,6 +107,9 @@ class Choice(models.Model):
 
     def __unicode__(self):
         return self.choice
+
+    def vote(self):
+        self.votes += 1
 
     class Meta:
         ordering = ['position']
