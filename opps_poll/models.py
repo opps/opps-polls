@@ -50,18 +50,11 @@ class Poll(Publishable):
             return True
         return self.date_end >= timezone.now()
 
-    def get_form(self, *args, **kwargs):
+    def form(self, *args, **kwargs):
         if self.multiple_choices:
-            return MultipleChoiceForm(*args, **kwargs)
+            return MultipleChoiceForm(self.choice_set.all(), *args, **kwargs)
         else:
-            return SingleChoiceForm(*args, **kwargs)
-
-    def post_form(self, request, *args, **kwargs):
-        if self.multiple_choices:
-            return MultipleChoiceForm(request.POST, *args, **kwargs)
-        else:
-            return SingleChoiceForm(request.POST, *args, **kwargs)
-
+            return SingleChoiceForm(self.choice_set.all(), *args, **kwargs)
 
     def __unicode__(self):
         return self.question

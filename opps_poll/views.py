@@ -13,7 +13,7 @@ from opps_poll.forms import SingleChoiceForm, MultipleChoiceForm
 
 class PollList(ListView):
 
-    context_object_name = "context"
+    context_object_name = "polls"
 
     @property
     def template_name(self):
@@ -27,7 +27,7 @@ class PollList(ListView):
 
 class ChannelPollList(ListView):
 
-    context_object_name = "context"
+    context_object_name = "polls"
 
     @property
     def template_name(self):
@@ -38,7 +38,10 @@ class ChannelPollList(ListView):
     def queryset(self):
         long_slug = self.kwargs['channel__long_slug'][:-1]
         get_object_or_404(Channel, long_slug=long_slug)
-        return Poll.objects.filter(channel__long_slug=long_slug).all_published()
+        return Poll.objects.filter(
+               channel__long_slug=long_slug,
+               published=True
+            )
 
 
 
