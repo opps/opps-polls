@@ -81,8 +81,6 @@ class PollDetail(DetailView):
             if name:
                 names.insert(0, name)
 
-        # long_slug = self.kwargs.get('channel__long_slug')
-
         if self.object.channel:
             long_slug = self.object.channel.long_slug
             # 1. try channel/poll template
@@ -136,7 +134,7 @@ class PollDetail(DetailView):
         #already voted send the voted object to template
         if request.COOKIES.has_key(self.object.cookie_name):
             choices = request.COOKIES[self.object.cookie_name]
-            context['voted'] = self.object.get_voted_choices(choices)
+            self.voted = context['voted'] = self.object.get_voted_choices(choices)
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -153,6 +151,24 @@ class PollDetail(DetailView):
         if not request.POST.get('choices'):
             context['error'] = _(u"You should select at least one option")
             return self.render_to_response(context)
+
+        # check minimum and maximum choices
+        if self.object.multiple_choices:
+            try:
+                choices_ids = request.POST.getlist('choices')
+            except:
+                choices_ids = (request.POST.get('choices'),)
+
+            min_multiple_choices = self.object.min_multiple_choices
+            max_multiple_choices = self.object.max_multiple_choices
+
+            if min_multiple_choices and len(choices_ids) < min_multiple_choices:
+                context['error'] = _(u"You should select at least %s options") % min_multiple_choices
+                return self.render_to_response(context)
+
+            if max_multiple_choices and len(choices_ids) > max_multiple_choices:
+                context['error'] = _(u"You can select only %s options") % max_multiple_choices
+                return self.render_to_response(context)
 
         self.voted = context['voted'] = self.object.vote(request)
 

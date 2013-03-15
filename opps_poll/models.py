@@ -18,6 +18,12 @@ class Poll(Publishable):
     question = models.CharField(_(u"Question"), max_length=255)
     multiple_choices = models.BooleanField(_(u"Allow multiple choices"),
         default=False)
+    max_multiple_choices = models.PositiveIntegerField(
+                                    _(u"Max number of selected choices"),
+                                    blank=True, null=True)
+    min_multiple_choices = models.PositiveIntegerField(
+                                    _(u"Min number of selected choices"),
+                                    blank=True, null=True)
     display_choice_images = models.BooleanField(_(u"Display Choice images"),
         default=True)
 
@@ -60,8 +66,8 @@ class Poll(Publishable):
 
     def get_voted_choices(self, choices):
         """
-        receives a str separeted by |
-        returns a list od choices
+        receives a str separated by "|"
+        returns a list of choices
         """
         choices_ids = [int(choice_id) for choice_id in choices.split("|")]
         return self.choice_set.filter(id__in=choices_ids)
@@ -74,11 +80,11 @@ class Poll(Publishable):
 
     def vote(self, request):
         try:
-            choice_ids = request.POST.getlist('choices')
+            choices_ids = request.POST.getlist('choices')
         except:
             choices_ids = (request.POST.get('choices'),)
 
-        choices = [Choice.objects.get(pk=int(choice_id)) for choice_id in choice_ids]
+        choices = self.choice_set.filter(id__in=choices_ids)
 
         for choice in choices:
             choice.vote()

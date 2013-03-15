@@ -54,7 +54,8 @@ class PollAdmin(admin.ModelAdmin):
         (_(u'Publication'), {
             'classes': ('extrapretty'),
             'fields': ('published', 'date_available', 'date_end',
-                'position', 'multiple_choices', 'display_choice_images',
+                'position', 'multiple_choices','max_multiple_choices',
+                'min_multiple_choices','display_choice_images',
                 'template_path')}),
     )
 
