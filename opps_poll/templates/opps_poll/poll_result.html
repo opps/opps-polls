@@ -5,15 +5,9 @@ Opps Poll
 <div>{{ poll.headline|safe }}</div>
 <img src="{% thumbor_url poll.main_image.image.url width=100 %}" />
 
-{% if error %}
-<div class="alert alert-error">
-  {{ error }}
-</div>
-{% endif %}
 
 <form method="post">
     {% csrf_token %}
     {{ poll.form.as_p }}
     <input type="submit" value="Vote">
 </form>
-

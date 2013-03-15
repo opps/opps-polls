@@ -1,0 +1,17 @@
+{% load thumbor_tags %}
+Opps Poll
+
+<h1>{{ poll.question }}</h1>
+<div>{{ poll.headline|safe }}</div>
+<img src="{% thumbor_url poll.main_image.image.url width=100 %}" />
+
+<h2> Thanks for voting </h2>
+
+<h3> Your choices:</h3>
+<ul>
+{% for choice in voted %}
+
+   <li>{{choice}}</li>
+
+{% endfor %}
+</ul>
