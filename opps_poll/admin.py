@@ -54,7 +54,8 @@ class PollAdmin(admin.ModelAdmin):
         (_(u'Publication'), {
             'classes': ('extrapretty'),
             'fields': ('published', 'date_available', 'date_end',
-                'position', 'multiple_choices')}),
+                'position', 'multiple_choices', 'display_choice_images',
+                'template_path')}),
     )
 
     def save_model(self, request, obj, form, change):
