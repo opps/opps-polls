@@ -4,9 +4,11 @@
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from opps.channel.models import Channel
 from opps_poll.models import Poll, Choice
+from opps_poll.forms import SingleChoiceForm, MultipleChoiceForm
 
 
 class PollList(ListView):

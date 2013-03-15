@@ -10,12 +10,16 @@ from opps.channel.models import Channel
 from opps.article.models import Post
 from opps.image.models import Image
 
+from opps_poll.forms import MultipleChoiceForm, SingleChoiceForm
+
 
 class Poll(Publishable):
 
     question = models.CharField(_(u"Question"), max_length=255)
     multiple_choices = models.BooleanField(_(u"Allow multiple choices"),
         default=False)
+    display_choice_images = models.BooleanField(_(u"Display Choice images"),
+        default=True)
 
     slug = models.SlugField(_(u"URL"), max_length=150, unique=True,
                             db_index=True)
@@ -36,12 +40,28 @@ class Poll(Publishable):
     tags = TagField(null=True, verbose_name=_(u"Tags"))
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
     position  = models.IntegerField(_(u"Position"), default=0)
+    template_path  = models.CharField(_(u"Template Path"), blank=True,
+                                     null=True, max_length=255)
+
 
     @property
     def is_opened(self):
         if not self.date_end:
             return True
-        return self.date_end
+        return self.date_end >= timezone.now()
+
+    def get_form(self, *args, **kwargs):
+        if self.multiple_choices:
+            return MultipleChoiceForm(*args, **kwargs)
+        else:
+            return SingleChoiceForm(*args, **kwargs)
+
+    def post_form(self, request, *args, **kwargs):
+        if self.multiple_choices:
+            return MultipleChoiceForm(request.POST, *args, **kwargs)
+        else:
+            return SingleChoiceForm(request.POST, *args, **kwargs)
+
 
     def __unicode__(self):
         return self.question
