@@ -50,14 +50,21 @@ class Poll(Publishable):
             return True
         return self.date_end >= timezone.now()
 
+    @property
+    def choices(self):
+        return self.choice_set.all()
+
     def form(self, *args, **kwargs):
         if self.multiple_choices:
-            return MultipleChoiceForm(self.choice_set.all(), *args, **kwargs)
+            return MultipleChoiceForm(self.choices, self.display_choice_images, *args, **kwargs)
         else:
-            return SingleChoiceForm(self.choice_set.all(), *args, **kwargs)
+            return SingleChoiceForm(self.choices, self.display_choice_images, *args, **kwargs)
 
     def __unicode__(self):
         return self.question
+
+    class Meta:
+        ordering = ['position']
 
 
 class PollPost(models.Model):
@@ -86,3 +93,6 @@ class Choice(models.Model):
 
     def __unicode__(self):
         return self.choice
+
+    class Meta:
+        ordering = ['position']
