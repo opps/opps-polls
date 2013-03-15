@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from opps.channel.models import Channel
 from opps_poll.models import Poll, Choice
 from opps_poll.forms import SingleChoiceForm, MultipleChoiceForm
-
+from opps_poll.utils import CookedResponse
 
 class PollList(ListView):
 
@@ -129,20 +129,38 @@ class PollDetail(DetailView):
                    date_available__lte=timezone.now()
                )
 
-    # def get(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     context = super(PollDetail, self).get_context_data(**kwargs)
-    #     form = SingleChoiceForm()
-    #     context['form'] = form
-    #     return self.render_to_response(context)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(PollDetail, self).get_context_data(**kwargs)
+
+        #already voted send the voted object to template
+        if request.COOKIES.has_key(self.object.cookie_name):
+            choices = request.COOKIES[self.object.cookie_name]
+            context['voted'] = self.object.get_voted_choices(choices)
+        return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        print request.GET, request.POST
+
         self.object = self.get_object()
         context = self.get_context_data(**kwargs)
+
+        # check if already voted
+        if request.COOKIES.has_key(self.object.cookie_name):
+            context['error'] = _(u"You already voted on this poll")
+            return self.render_to_response(context)
+
+        # check if choices has been sent
         if not request.POST.get('choices'):
             context['error'] = _(u"You should select at least one option")
             return self.render_to_response(context)
 
         self.voted = context['voted'] = self.object.vote(request)
+
+        if self.voted:
+            # set the cookie
+            self.response_class = CookedResponse
+            cookie_value = u"|".join([str(choice.pk) for choice in self.voted])
+            cookie = (self.object.cookie_name, cookie_value)
+            return self.render_to_response(context, cookie=cookie)
+
         return self.render_to_response(context)

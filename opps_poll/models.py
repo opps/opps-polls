@@ -54,6 +54,18 @@ class Poll(Publishable):
     def choices(self):
         return self.choice_set.all()
 
+    @property
+    def cookie_name(self):
+        return "opps_poll_{0}".format(self.pk)
+
+    def get_voted_choices(self, choices):
+        """
+        receives a str separeted by |
+        returns a list od choices
+        """
+        choices_ids = [int(choice_id) for choice_id in choices.split("|")]
+        return self.choice_set.filter(id__in=choices_ids)
+
     def form(self, *args, **kwargs):
         if self.multiple_choices:
             return MultipleChoiceForm(self.choices, self.display_choice_images, *args, **kwargs)
