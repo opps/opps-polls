@@ -1,24 +1,20 @@
 {% load thumbor_tags %}
-
  <a href="{% url 'opps_poll:list_poll'%}">< All polls </a><br/>
- Opps Poll Detail
+Opps Poll Result
 
 <h1>{{ poll.question }}</h1>
 <div>{{ poll.headline|safe }}</div>
-
 {% if poll.main_image %}
 <img src="{% thumbor_url poll.main_image.image.url width=100 %}" />
 {% endif %}
 
-{% if error %}
-<div class="alert alert-error">
-  {{ error }}
-</div>
-{% endif %}
+This pool is not opened for voting or results
+<br>
+<ul>
+{% for choice in poll.choices %}
+    <li>
+        {{choice.choice}}
+    </li>
+{% endfor %}
+</ul>
 
-
-<form method="post">
-    {% csrf_token %}
-    {{ poll.form.as_p }}
-    <input type="submit" value="Vote">
-</form>

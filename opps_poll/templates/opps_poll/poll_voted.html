@@ -1,6 +1,6 @@
 {% load thumbor_tags %}
  <a href="{% url 'opps_poll:list_poll'%}">< All polls </a><br/>
- Opps Poll Voted Virgula
+ Opps Poll Voted
 
 <h1>{{ poll.question }}</h1>
 <div>{{ poll.headline|safe }}</div>
@@ -18,4 +18,6 @@
 {% endfor %}
 </ul>
 
+{% if poll.show_results %}
  <a href="{% url 'opps_poll:result_poll' slug=poll.slug result='results' %}"> Ver resultados </a><br/>
+{% endif %}

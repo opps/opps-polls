@@ -63,11 +63,16 @@ class PollDetail(DetailView):
         if self.voted:
             self.template_name_suffix = "_voted"
 
-        if not self.object.is_opened:
+        # decide if show results page
+        if not self.object.is_opened and self.object.show_results:
             self.template_name_suffix = "_result"
+        elif not self.object.is_opened:
+            self.template_name_suffix = "_closed"
 
-        if self.kwargs.get('result'):
+        if self.kwargs.get('result') and self.object.show_results:
             self.template_name_suffix = "_result"
+        elif self.kwargs.get('result') and not self.object.show_results:
+            self.template_name_suffix = "_closed"
 
         if hasattr(self.object, '_meta'):
             app_label = self.object._meta.app_label

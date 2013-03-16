@@ -26,7 +26,7 @@ class Poll(Publishable):
                                     _(u"Min number of selected choices"),
                                     blank=True, null=True)
     display_choice_images = models.BooleanField(_(u"Display Choice images"),
-        default=True)
+        default=False)
 
     slug = models.SlugField(_(u"URL"), max_length=150, unique=True,
                             db_index=True)
@@ -49,6 +49,7 @@ class Poll(Publishable):
     position  = models.IntegerField(_(u"Position"), default=0)
     template_path  = models.CharField(_(u"Template Path"), blank=True,
                                      null=True, max_length=255)
+    show_results = models.BooleanField(_(u"Show results page"), default=True)
 
 
     @property
