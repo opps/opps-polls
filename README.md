@@ -13,10 +13,11 @@ Features
 * Block multiple votes by cookie
 * End date and Start date
 * Allow images for each choice
+* Set min and max allowed choices for voting
 
 Requirements
 -----------
-Django>1.5
+Django>1.5  
 Opps
 
 Instalation
@@ -61,14 +62,14 @@ Now **opps_poll** is available on your Django admin and you can access the url *
 Application URLs
 ----------------
 
-*    List all polls
+*    List all polls  
      /poll/
-*    List all polls by channel
-     /poll/channel/<channel-slug>
-*    Poll voting page
-     /poll/<poll-slug>
-*    Poll results page
-     /poll/<poll-slug>/results (you can use any word here i.e: /poll/<poll-slug>/resultados)
+*    List all polls by channel  
+     /poll/channel/< channel-slug >
+*    Poll voting page  
+     /poll/< poll-slug >
+*    Poll results page  
+     /poll/< poll-slug >/results (you can use any word here i.e: /poll/< poll-slug >/resultados)
 
 Application Templates
 ---------------
@@ -90,17 +91,15 @@ For any template the context has the following objects:
 
 **Custom template files**
 
-opps_poll will try to find the most specific template to render.
-
-You can choose some ways to force a custom template
-
-In order of precedende:
+opps_poll will try to find the most specific template to render.  
+You can choose some ways to force a custom template  
+In order of precedence:  
 
 1. Set **template_path** in each poll object
-2. Create a **opps_poll/<channel-slug>/<poll-slug>_<sufix>.html**
-3. Create a **opps_poll/<channel-slug>_<sufix>.html**
-4. Create a **opps_poll/<poll-slug>_<sufix>.html**
-5. Create a **opps_poll/poll_<sufix>.html**
+2. Create a **opps_poll/< channel-slug >/< poll-slug >_<sufix>.html**
+3. Create a **opps_poll/< channel-slug >_< sufix >.html**
+4. Create a **opps_poll/< poll-slug >_< sufix >.html**
+5. Create a **opps_poll/poll_< sufix >.html**
 
 Available sufix are: list, detail, voted, result, closed
 
