@@ -57,6 +57,21 @@ urlpatterns = patterns('',
 )
 ```
 
+Create the tables
+
+```python
+python manage.py syncdb
+```
+You should see:  
+
+```
+...
+Creating table opps_poll_poll
+Creating table opps_poll_pollpost
+Creating table opps_poll_choice
+...
+```
+
 Now **opps_poll** is available on your Django admin and you can access the url *http://..../poll/*
 
 Application URLs
