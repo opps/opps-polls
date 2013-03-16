@@ -1,10 +1,12 @@
 {% load thumbor_tags %}
-Opps Poll
+ <a href="{% url 'opps_poll:list_poll'%}">< All polls </a><br/>
+ Opps Poll Voted Virgula
 
 <h1>{{ poll.question }}</h1>
 <div>{{ poll.headline|safe }}</div>
+{% if poll.main_image %}
 <img src="{% thumbor_url poll.main_image.image.url width=100 %}" />
-
+{% endif %}
 <h2> Thanks for voting </h2>
 
 <h3> Your choices:</h3>
@@ -15,3 +17,5 @@ Opps Poll
 
 {% endfor %}
 </ul>
+
+ <a href="{% url 'opps_poll:result_poll' slug=poll.slug result='results' %}"> Ver resultados </a><br/>

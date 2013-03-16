@@ -60,11 +60,14 @@ class PollDetail(DetailView):
         """
         names = []#super(PollDetail, self).get_template_names()
 
+        if self.voted:
+            self.template_name_suffix = "_voted"
+
         if not self.object.is_opened:
             self.template_name_suffix = "_result"
 
-        if self.voted:
-            self.template_name_suffix = "_voted"
+        if self.kwargs.get('result'):
+            self.template_name_suffix = "_result"
 
         if hasattr(self.object, '_meta'):
             app_label = self.object._meta.app_label
@@ -141,6 +144,12 @@ class PollDetail(DetailView):
 
         self.object = self.get_object()
         context = self.get_context_data(**kwargs)
+
+        # check if is_closed or not published
+        # to deny votes
+        if not self.object.is_opened or not self.object.published:
+            context['error'] = _(u"Poll not opened for voting")
+            return self.render_to_response(context)
 
         # check if already voted
         if request.COOKIES.has_key(self.object.cookie_name):

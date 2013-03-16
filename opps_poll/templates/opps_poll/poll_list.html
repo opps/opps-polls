@@ -1,10 +1,12 @@
 {% load thumbor_tags %}
-Opps Poll List
+Opps Poll List - Virgula
 
 <ul>
   {% for poll in polls %}
   <li>
+    {% if poll.main_image %}
     <img src="{% thumbor_url poll.main_image.image.url width=10 %}" />
+    {% endif %}
     <a href="{% url 'opps_poll:open_poll' poll.slug %}" alt="{{ poll.question }}">{{ poll.question }}</a>
   </li>
   {% endfor %}

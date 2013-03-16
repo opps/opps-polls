@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.db.models import Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -63,6 +64,10 @@ class Poll(Publishable):
     @property
     def cookie_name(self):
         return "opps_poll_{0}".format(self.pk)
+
+    @property
+    def vote_count(self):
+        return self.choices.aggregate(Sum('votes'))['votes__sum']
 
     def get_voted_choices(self, choices):
         """
@@ -128,6 +133,10 @@ class Choice(models.Model):
 
     def vote(self):
         self.votes += 1
+
+    @property
+    def percentage(self):
+        return float(self.votes) / float(self.poll.vote_count) * 100
 
     class Meta:
         ordering = ['position']
