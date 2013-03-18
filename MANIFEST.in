@@ -1,2 +1,1 @@
-include opps/polls/*
-include opps/polls/templates/*
+include opps/polls/templates/polls/*
