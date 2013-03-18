@@ -43,4 +43,7 @@ setup(name='opps-polls',
         packages=find_packages(exclude=('doc', 'docs',)),
         package_dir={'opps': 'opps'},
         install_requires=install_requires,
-        include_package_data=True,)
+        include_package_data=True,
+        package_data={
+           'polls': ['templates/*']
+        })
