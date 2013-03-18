@@ -3,7 +3,7 @@
 #
 from django.conf.urls import patterns, url
 
-from opps_poll.views import PollDetail, PollList, ChannelPollList
+from .views import PollDetail, PollList, ChannelPollList
 
 
 urlpatterns = patterns(

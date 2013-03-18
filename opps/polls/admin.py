@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 
-from opps_poll.models import Poll, Choice, PollPost
+from .models import Poll, Choice, PollPost
 
 from redactor.widgets import RedactorEditor
 

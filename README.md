@@ -1,4 +1,4 @@
-opps_poll
+opps.polls
 =========
 
 Application Poll for Opps
@@ -17,7 +17,7 @@ Features
 
 Requirements
 -----------
-Django>1.5  
+Django>1.5
 Opps
 
 Instalation
@@ -26,18 +26,18 @@ Instalation
 
 or
 
-``pip install opps_poll``
+``pip install opps-polls``
 
 Configuration
 -------------
 
 **App**
 
-Include opps_poll on your django settings
+Include opps.polls on your django settings
 
 ```python
 INSTALLED_APPS += (
-    'opps_poll'
+    'opps.polls'
 )
 ```
 
@@ -49,7 +49,7 @@ Include in your project urls.py before the opps entry
 urlpatterns = patterns('',
     ...
     ...
-    url(r'^poll/', include('opps_poll.urls', namespace='opps_poll', app_name='opps_poll')),
+    url(r'^poll/', include('opps.polls.urls', namespace='polls', app_name='polls')),
     ...
     url(r'^', include('opps.urls')),
     ...
@@ -62,28 +62,28 @@ Create the tables
 ```python
 python manage.py syncdb
 ```
-You should see:  
+You should see:
 
 ```
 ...
-Creating table opps_poll_poll
-Creating table opps_poll_pollpost
-Creating table opps_poll_choice
+Creating table polls_poll
+Creating table polls_pollpost
+Creating table polls_choice
 ...
 ```
 
-Now **opps_poll** is available on your Django admin and you can access the url *http://..../poll/*
+Now **opps.polls** is available on your Django admin and you can access the url *http://..../poll/*
 
 Application URLs
 ----------------
 
-*    List all polls  
+*    List all polls
      /poll/
-*    List all polls by channel  
+*    List all polls by channel
      /poll/channel/< channel-slug >
-*    Poll voting page  
+*    Poll voting page
      /poll/< poll-slug >
-*    Poll results page  
+*    Poll results page
      /poll/< poll-slug >/results (you can use any word here i.e: /poll/< poll-slug >/resultados)
 
 Application Templates
@@ -97,31 +97,31 @@ For any template the context has the following objects:
 
 **Default template files**
 
-* opps_poll/pool_list.html (List all polls)
-* opps_poll/pool_detail.html (Show details and voting form)
-* opps_poll/pool_voted.html (Showed after the user has voted)
-* opps_poll/pool_result.html (Results percentage)
-* opps_poll/pool_closed.html (Showed when poll is not opened for voting or results)
+* polls/pool_list.html (List all polls)
+* polls/pool_detail.html (Show details and voting form)
+* polls/pool_voted.html (Showed after the user has voted)
+* polls/pool_result.html (Results percentage)
+* polls/pool_closed.html (Showed when poll is not opened for voting or results)
 
 
 **Custom template files**
 
-opps_poll will try to find the most specific template to render.  
-You can choose some ways to force a custom template  
-In order of precedence:  
+polls will try to find the most specific template to render.
+You can choose some ways to force a custom template
+In order of precedence:
 
 1. Set **template_path** in each poll object
-2. Create a **opps_poll/< channel-slug >/< poll-slug >_<sufix>.html**
-3. Create a **opps_poll/< channel-slug >_< sufix >.html**
-4. Create a **opps_poll/< poll-slug >_< sufix >.html**
-5. Create a **opps_poll/poll_< sufix >.html**
+2. Create a **polls/< channel-slug >/< poll-slug >_<sufix>.html**
+3. Create a **polls/< channel-slug >_< sufix >.html**
+4. Create a **polls/< poll-slug >_< sufix >.html**
+5. Create a **polls/poll_< sufix >.html**
 
 Available sufix are: list, detail, voted, result, closed
 
 
 Contacts
 ========
-The place to create issues is `opps_poll github issues <https://github.com/oppsproject/opps.poll/issues>`_. The more information you send about an issue, the greater the chance it will get fixed fast.
+The place to create issues is `polls github issues <https://github.com/oppsproject/opps.poll/issues>`_. The more information you send about an issue, the greater the chance it will get fixed fast.
 
 If you are not sure about something, have a doubt or feedback, or just want to ask for a feature, feel free to join `our mailing list <http://groups.google.com/group/opps-developers>`_, or, if you're on FreeNode (IRC), you can join the chat #opps .
 

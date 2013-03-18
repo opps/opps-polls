@@ -3,7 +3,7 @@
 
 
 from django import forms
-from opps_poll.widgets import CheckboxSelectMultiple, RadioSelect
+from .widgets import CheckboxSelectMultiple, RadioSelect
 
 
 class SingleChoiceForm(forms.Form):

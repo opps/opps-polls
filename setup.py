@@ -3,8 +3,7 @@
 
 from setuptools import setup, find_packages
 
-import opps_poll
-
+from opps import polls
 
 
 install_requires = ["Django==1.5",
@@ -27,20 +26,21 @@ classifiers = ["Development Status :: 4 - Beta",
 try:
     long_description = open('README.md').read()
 except:
-    long_description = opps_poll.__description__
+    long_description = polls.__description__
 
-setup(name='opps_poll',
-        version=opps_poll.__version__,
-        description=opps_poll.__description__,
+setup(name='opps-polls',
+        namespace_packages=['opps'],
+        version=polls.__version__,
+        description=polls.__description__,
         long_description=long_description,
         classifiers=classifiers,
         keywords='poll opps cms django apps magazines websites',
-        author=opps_poll.__author__,
-        author_email=opps_poll.__email__,
+        author=polls.__author__,
+        author_email=polls.__email__,
         url='http://oppsproject.org',
         download_url="https://github.com/oppsproject/opps.poll/tarball/master",
-        license=opps_poll.__license__,
+        license=polls.__license__,
         packages=find_packages(exclude=('doc', 'docs',)),
-        package_dir={'opps_poll': 'opps_poll'},
+        package_dir={'opps': 'opps'},
         install_requires=install_requires,
         include_package_data=True,)

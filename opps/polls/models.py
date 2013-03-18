@@ -11,7 +11,7 @@ from opps.channel.models import Channel
 from opps.article.models import Post
 from opps.image.models import Image
 
-from opps_poll.forms import MultipleChoiceForm, SingleChoiceForm
+from .forms import MultipleChoiceForm, SingleChoiceForm
 
 
 class Poll(Publishable):

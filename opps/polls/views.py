@@ -8,9 +8,9 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from opps.channel.models import Channel
-from opps_poll.models import Poll, Choice
-from opps_poll.forms import SingleChoiceForm, MultipleChoiceForm
-from opps_poll.utils import CookedResponse
+from .models import Poll, Choice
+from .forms import SingleChoiceForm, MultipleChoiceForm
+from .utils import CookedResponse
 
 class PollList(ListView):
 
@@ -18,7 +18,7 @@ class PollList(ListView):
 
     @property
     def template_name(self):
-        return 'opps_poll/pool_list.html'
+        return 'polls/pool_list.html'
 
     @property
     def queryset(self):
@@ -33,7 +33,7 @@ class ChannelPollList(ListView):
     @property
     def template_name(self):
         long_slug = self.kwargs.get('channel__long_slug')
-        return 'opps_poll/{0}.html'.format(long_slug)
+        return 'polls/{0}.html'.format(long_slug)
 
     @property
     def queryset(self):
