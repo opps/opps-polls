@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from opps.channel.models import Channel
+from opps.channels.models import Channel
 from .models import Poll, Choice
 from .forms import SingleChoiceForm, MultipleChoiceForm
 from .utils import CookedResponse
