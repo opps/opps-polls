@@ -7,7 +7,7 @@ Opps Poll List
     {% if poll.main_image %}
     <img src="{% thumbor_url poll.main_image.image.url width=10 %}" />
     {% endif %}
-    <a href="{% url 'opps_poll:open_poll' poll.slug %}" alt="{{ poll.question }}">{{ poll.question }}</a>
+    <a href="{% url 'polls:open_poll' poll.slug %}" alt="{{ poll.question }}">{{ poll.question }}</a>
   </li>
   {% endfor %}
 </ul>
