@@ -7,9 +7,9 @@ from django.utils.translation import ugettext_lazy as _
 from tagging.fields import TagField
 
 from opps.core.models import Publishable
-from opps.channel.models import Channel
-from opps.article.models import Post
-from opps.image.models import Image
+from opps.channels.models import Channel
+from opps.articles.models import Post
+from opps.images.models import Image
 
 from .forms import MultipleChoiceForm, SingleChoiceForm
 
