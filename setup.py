@@ -25,7 +25,7 @@ except:
     long_description = polls.__description__
 
 setup(name='opps-polls',
-        namespace_packages=['opps'],
+        namespace_packages=['opps', 'opps.polls'],
         version=polls.__version__,
         description=polls.__description__,
         long_description=long_description,
