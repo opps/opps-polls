@@ -6,11 +6,7 @@ from setuptools import setup, find_packages
 from opps import polls
 
 
-install_requires = ["Django==1.5",
-                    "south>=0.7",
-                    "django-tagging==0.3.1",
-                    "django-wysiwyg-redactor==0.3.1",
-                    "opps"]
+install_requires = ["opps"]
 
 classifiers = ["Development Status :: 4 - Beta",
                "Intended Audience :: Developers",
