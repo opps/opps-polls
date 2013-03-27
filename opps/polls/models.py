@@ -54,9 +54,14 @@ class Poll(Publishable):
 
     @property
     def is_opened(self):
-        if not self.date_end:
+        now = timezone.now()
+        if not self.date_end and not self.date_available:
             return True
-        return self.date_end >= timezone.now()
+        elif not self.date_end and self.date_available <= now:
+            return True
+        elif not self.date_end and self.date_available > now:
+            return False
+        return now >= self.date_available and now <= self.date_end
 
     @property
     def choices(self):
