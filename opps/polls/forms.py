@@ -13,7 +13,7 @@ class SingleChoiceForm(forms.Form):
 
         if display_choice_images:
             choices_list = [
-              (choice.id, "<img src='{0}' > {1}".format(
+              (choice.id, u"<img src='{0}' > {1}".format(
                 choice.image.image.url if choice.image else '#', choice.choice
                 )) for choice in choices
             ]
@@ -33,7 +33,7 @@ class MultipleChoiceForm(forms.Form):
 
         if display_choice_images:
             choices_list = [
-              (choice.id, "<img src='{0}' > {1}".format(
+              (choice.id, u"<img src='{0}' > {1}".format(
                   choice.image.image.url if choice.image else '#', choice.choice
                   )) for choice in choices
             ]

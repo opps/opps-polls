@@ -15,7 +15,7 @@ class CheckboxSelectMultiple(forms.widgets.CheckboxSelectMultiple):
         if value is None: value = []
         final_attrs = self.build_attrs(attrs, name=name)
         id_ = final_attrs.get('id', None)
-        output = ['<ul>']
+        output = [u'<ul>']
         # Normalize to strings
         str_values = set([force_text(v) for v in value])
         for i, (option_value, option_label) in enumerate(chain(self.choices, choices)):
@@ -23,7 +23,7 @@ class CheckboxSelectMultiple(forms.widgets.CheckboxSelectMultiple):
             # so that the checkboxes don't all have the same ID attribute.
             if id_:
                 final_attrs = dict(final_attrs, id='%s_%s' % (id_, i))
-                label_for = format_html(' for="{0}_{1}"', id_, i)
+                label_for = format_html(u' for="{0}_{1}"', id_, i)
             else:
                 label_for = ''
 
@@ -31,9 +31,9 @@ class CheckboxSelectMultiple(forms.widgets.CheckboxSelectMultiple):
             option_value = force_text(option_value)
             rendered_cb = cb.render(name, option_value)
             option_label = format_html(option_label)
-            output.append(format_html('<li><label{0}>{1} {2}</label></li>',
+            output.append(format_html(u'<li><label{0}>{1} {2}</label></li>',
                                       label_for, rendered_cb, option_label))
-        output.append('</ul>')
+        output.append(u'</ul>')
         return mark_safe('\n'.join(output))
 
 
@@ -43,11 +43,11 @@ class RadioInput(forms.widgets.RadioInput):
         value = value or self.value
         attrs = attrs or self.attrs
         if 'id' in self.attrs:
-            label_for = format_html(' for="{0}_{1}"', self.attrs['id'], self.index)
+            label_for = format_html(u' for="{0}_{1}"', self.attrs['id'], self.index)
         else:
-            label_for = ''
+            label_for = u''
         choice_label = format_html(self.choice_label)
-        return format_html('<label{0}>{1} {2}</label>', label_for, self.tag(), choice_label)
+        return format_html(u'<label{0}>{1} {2}</label>', label_for, self.tag(), choice_label)
 
 
 @python_2_unicode_compatible
@@ -73,8 +73,8 @@ class RadioFieldRenderer(object):
 
     def render(self):
         """Outputs a <ul> for this set of radio fields."""
-        return format_html('<ul>\n{0}\n</ul>',
-                           format_html_join('\n', '<li>{0}</li>',
+        return format_html(u'<ul>\n{0}\n</ul>',
+                           format_html_join('\n', u'<li>{0}</li>',
                                             [(force_text(w),) for w in self]
                                             ))
 
