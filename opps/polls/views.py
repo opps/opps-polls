@@ -12,18 +12,18 @@ from .models import Poll, Choice
 from .forms import SingleChoiceForm, MultipleChoiceForm
 from .utils import CookedResponse
 
+
 class PollList(ListView):
 
     context_object_name = "polls"
 
     @property
     def template_name(self):
-        return 'polls/pool_list.html'
+        return 'polls/poll_list.html'
 
     @property
     def queryset(self):
         return Poll.objects.all_published()
-
 
 
 class ChannelPollList(ListView):
@@ -46,7 +46,6 @@ class ChannelPollList(ListView):
                )
 
 
-
 class PollDetail(DetailView):
 
     context_object_name = "poll"
@@ -58,7 +57,7 @@ class PollDetail(DetailView):
         Return a list of template names to be used for the request. Must return
         a list. May not be called if get_template is overridden.
         """
-        names = []#super(PollDetail, self).get_template_names()
+        names = []
 
         if self.voted:
             self.template_name_suffix = "_voted"
