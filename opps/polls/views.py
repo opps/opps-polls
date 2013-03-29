@@ -19,7 +19,20 @@ class PollList(ListView):
 
     @property
     def template_name(self):
-        return 'polls/poll_list.html'
+        homepage = Channel.objects.get_homepage(site=self.site)
+        if not homepage:
+            return None
+
+        long_slug = self.kwargs.get('channel__long_slug',
+                                    homepage.long_slug)
+        if homepage.long_slug != long_slug:
+            long_slug = long_slug[:-1]
+
+        domain_folder = 'polls'
+        if self.site.id > 1:
+            domain_folder = "{0}/polls".format(self.site)
+
+        return '{0}/{1}.html'.format(domain_folder, long_slug)
 
     @property
     def queryset(self):
@@ -32,8 +45,20 @@ class ChannelPollList(ListView):
 
     @property
     def template_name(self):
-        long_slug = self.kwargs.get('channel__long_slug')
-        return 'polls/{0}.html'.format(long_slug)
+        homepage = Channel.objects.get_homepage(site=self.site)
+        if not homepage:
+            return None
+
+        long_slug = self.kwargs.get('channel__long_slug',
+                                    homepage.long_slug)
+        if homepage.long_slug != long_slug:
+            long_slug = long_slug[:-1]
+
+        domain_folder = 'polls'
+        if self.site.id > 1:
+            domain_folder = "{0}/polls".format(self.site)
+
+        return '{0}/{1}.html'.format(domain_folder, long_slug)
 
     @property
     def queryset(self):
@@ -90,6 +115,12 @@ class PollDetail(DetailView):
 
         if self.object.channel:
             long_slug = self.object.channel.long_slug
+
+            # site specific template folder
+            # sitename/polls/
+            if self.site.id > 1:
+                app_label = "{0}/{1}".format(self.site, app_label)
+
             # 1. try channel/poll template
             # opps_poll/channel-slug/poll-slug.html
             names.append('{0}/{1}/{2}.html'.format(
