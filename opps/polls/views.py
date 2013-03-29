@@ -28,6 +28,7 @@ class PollList(ListView):
 
     @property
     def queryset(self):
+        self.site = get_current_site(self.request)
         return Poll.objects.all_published()
 
 
@@ -54,6 +55,7 @@ class ChannelPollList(ListView):
 
     @property
     def queryset(self):
+        self.site = get_current_site(self.request)
         long_slug = self.kwargs['channel__long_slug'][:-1]
         get_object_or_404(Channel, long_slug=long_slug)
         return Poll.objects.filter(
@@ -150,6 +152,7 @@ class PollDetail(DetailView):
 
     def get_object(self):
         self.voted = False
+        self.site = get_current_site(self.request)
         return get_object_or_404(
                    Poll,
                    slug=self.kwargs['slug'],
