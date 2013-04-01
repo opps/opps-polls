@@ -47,8 +47,6 @@ class Poll(Publishable):
     tags = TagField(null=True, verbose_name=_(u"Tags"))
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
     position  = models.IntegerField(_(u"Position"), default=0)
-    template_path  = models.CharField(_(u"Template Path"), blank=True,
-                                     null=True, max_length=255)
     show_results = models.BooleanField(_(u"Show results page"), default=True)
 
 
