@@ -117,7 +117,7 @@ class PollPost(models.Model):
 
 
     def __unicode__(self):
-        return "{0}-{1}".format(self.poll.slug, self.post.slug)
+        return u"{0}-{1}".format(self.poll.slug, self.post.slug)
 
 
 class Choice(models.Model):
