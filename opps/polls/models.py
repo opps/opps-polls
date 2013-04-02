@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from tagging.fields import TagField
+from taggit.managers import TaggableManager
 
 from opps.core.models import Publishable
 from opps.channels.models import Channel
@@ -44,7 +44,7 @@ class Poll(Publishable):
                                    null=True, on_delete=models.SET_NULL,
                                    related_name='poll_image')
 
-    tags = TagField(null=True, verbose_name=_(u"Tags"))
+    tags = TaggableManager(blank=True)
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
     position  = models.IntegerField(_(u"Position"), default=0)
     show_results = models.BooleanField(_(u"Show results page"), default=True)
