@@ -7,9 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from taggit.managers import TaggableManager
 
 from opps.core.models import Publishable, BaseBox, BaseConfig
-from opps.channels.models import Channel
-from opps.articles.models import Post
-from opps.images.models import Image
 
 from .forms import MultipleChoiceForm, SingleChoiceForm
 
@@ -33,13 +30,13 @@ class Poll(Publishable):
 
     headline = models.TextField(_(u"Headline"), blank=True)
 
-    channel = models.ForeignKey(Channel, null=True, blank=True,
+    channel = models.ForeignKey('channels.Channel', null=True, blank=True,
                                 on_delete=models.SET_NULL)
-    posts = models.ManyToManyField(Post, null=True, blank=True,
+    posts = models.ManyToManyField('articles.Post', null=True, blank=True,
                                    related_name='poll_post',
                                    through='PollPost')
 
-    main_image = models.ForeignKey(Image,
+    main_image = models.ForeignKey('images.Image',
                                    verbose_name=_(u'Poll Image'), blank=True,
                                    null=True, on_delete=models.SET_NULL,
                                    related_name='poll_image')
@@ -108,10 +105,10 @@ class Poll(Publishable):
 
 
 class PollPost(models.Model):
-    post = models.ForeignKey(Post, verbose_name=_(u'Poll Post'), null=True,
+    post = models.ForeignKey('articles.Post', verbose_name=_(u'Poll Post'), null=True,
                              blank=True, related_name='pollpost_post',
                              on_delete=models.SET_NULL)
-    poll = models.ForeignKey(Poll, verbose_name=_(u'Poll'), null=True,
+    poll = models.ForeignKey('polls.Poll', verbose_name=_(u'Poll'), null=True,
                                    blank=True, related_name='poll',
                                    on_delete=models.SET_NULL)
 
@@ -122,10 +119,10 @@ class PollPost(models.Model):
 
 class Choice(models.Model):
 
-    poll = models.ForeignKey(Poll)
+    poll = models.ForeignKey('polls.Poll')
     choice = models.CharField(max_length=255, null=False, blank=False)
     votes = models.IntegerField(null=True, blank=True, default=0)
-    image = models.ForeignKey(Image,
+    image = models.ForeignKey('images.Image',
                             verbose_name=_(u'Choice Image'), blank=True,
                             null=True, on_delete=models.SET_NULL,
                             related_name='choice_image')
