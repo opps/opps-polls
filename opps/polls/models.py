@@ -13,11 +13,11 @@ from .forms import MultipleChoiceForm, SingleChoiceForm
 
 class PollManager(models.Manager):
     def all_published(self):
-        return super(PromoManager, self).get_query_set().filter(
+        return super(PollManager, self).get_query_set().filter(
             date_available__lte=timezone.now(), published=True)
 
     def all_opened(self):
-        return super(PromoManager, self).get_query_set().filter(
+        return super(PollManager, self).get_query_set().filter(
             date_available__lte=timezone.now(),
             published=True
         ).filter(
