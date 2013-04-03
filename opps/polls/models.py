@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from taggit.managers import TaggableManager
 
-from opps.core.models import Publishable
+from opps.core.models import Publishable, BaseBox, BaseConfig
 from opps.channels.models import Channel
 from opps.articles.models import Post
 from opps.images.models import Image
@@ -143,3 +143,58 @@ class Choice(models.Model):
 
     class Meta:
         ordering = ['position']
+
+
+class PollBox(BaseBox):
+
+    polls = models.ManyToManyField(
+        'polls.Poll',
+        null=True, blank=True,
+        related_name='pollbox_polls',
+        through='polls.PollBoxPolls'
+    )
+
+
+class PollBoxPolls(models.Model):
+    pollbox = models.ForeignKey(
+        'polls.PollBox',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='pollboxpolls_pollboxes',
+        verbose_name=_(u'Poll Box'),
+    )
+    poll = models.ForeignKey(
+        'polls.Poll',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='pollboxpolls_polls',
+        verbose_name=_(u'Poll'),
+    )
+    order = models.PositiveIntegerField(_(u'Order'), default=0)
+
+    def __unicode__(self):
+        return u"{0}-{1}".format(self.pollbox.slug, self.poll.slug)
+
+    def clean(self):
+
+        if not self.poll.published:
+            raise ValidationError('Poll not published!')
+
+        if self.poll.date_available <= timezone.now():
+            raise ValidationError('Poll not published!')
+
+
+class PollConfig(BaseConfig):
+
+    poll = models.ForeignKey(
+        'polls.Poll',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='pollconfig_polls',
+        verbose_name=_(u'Poll'),
+    )
+
+    class Meta:
+        permissions = (("developer", "Developer"),)
+        unique_together = ("key", "site", "channel", "article", "poll")
+
