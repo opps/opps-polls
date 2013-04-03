@@ -1,6 +1,8 @@
 {% load thumbor_tags %}
+{% load endless %}
 Opps Poll List
 
+{% paginate polls %}
 <ul>
   {% for poll in polls %}
   <li>
@@ -9,6 +11,8 @@ Opps Poll List
     {% endif %}
     <a href="{% url 'polls:open_poll' poll.slug %}" alt="{{ poll.question }}">{{ poll.question }}</a>
   </li>
+  {% empty %}
+         No polls
   {% endfor %}
 </ul>
-
+{% show_pages %}

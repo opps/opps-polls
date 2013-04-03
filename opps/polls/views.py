@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -13,6 +14,11 @@ from .models import Poll, Choice
 from .forms import SingleChoiceForm, MultipleChoiceForm
 from .utils import CookedResponse
 
+# IS THERE A BETTER WAY?
+if not 'endless_pagination' in settings.INSTALLED_APPS:
+    settings.INSTALLED_APPS += (
+        'endless_pagination',
+    )
 
 class PollList(ListView):
 
