@@ -6,15 +6,12 @@ from django.utils.translation import ugettext_lazy as _
 
 from taggit.managers import TaggableManager
 
-from opps.core.models import Publishable, BaseBox, BaseConfig
+from opps.core.models import Publishable, PublishableManager, BaseBox, BaseConfig
 
 from .forms import MultipleChoiceForm, SingleChoiceForm
 
 
-class PollManager(models.Manager):
-    def all_published(self):
-        return super(PollManager, self).get_query_set().filter(
-            date_available__lte=timezone.now(), published=True)
+class PollManager(PublishableManager):
 
     def all_opened(self):
         return super(PollManager, self).get_query_set().filter(
