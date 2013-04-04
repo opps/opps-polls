@@ -187,10 +187,10 @@ class PollBoxPolls(models.Model):
     def clean(self):
 
         if not self.poll.published:
-            raise ValidationError('Poll not published!')
+            raise ValidationError(_(u'Poll not published!'))
 
-        if self.poll.date_available <= timezone.now():
-            raise ValidationError('Poll not published!')
+        if not self.poll.date_available <= timezone.now():
+            raise ValidationError(_(u'Poll date_available is greater than today!'))
 
 
 class PollConfig(BaseConfig):
