@@ -8,6 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 from .models import (Poll, Choice, PollPost, PollBox,
                     PollBoxPolls, PollConfig)
 
+from opps.core.admin import PublishableAdmin
+
 from redactor.widgets import RedactorEditor
 
 
@@ -35,7 +37,7 @@ class PollPostInline(admin.TabularInline):
     classes = ('collapse',)
 
 
-class PollAdmin(admin.ModelAdmin):
+class PollAdmin(PublishableAdmin):
     form = PollAdminForm
     prepopulated_fields = {"slug": ["question"]}
     list_display = ['question', 'channel', 'date_available', 'date_end', 'published']
@@ -60,17 +62,6 @@ class PollAdmin(admin.ModelAdmin):
                 'show_results')}),
     )
 
-    def save_model(self, request, obj, form, change):
-        User = get_user_model()
-        try:
-            obj.site = obj.channel.site if obj.channel else Site.objects.get(pk=1)
-            if obj.user:
-                pass
-        except User.DoesNotExist:
-            obj.user = request.user
-
-        super(PollAdmin, self).save_model(request, obj, form, change)
-
 
 class PollBoxPollsInline(admin.TabularInline):
     model = PollBoxPolls
@@ -83,7 +74,7 @@ class PollBoxPollsInline(admin.TabularInline):
         'fields': ('poll', 'order')})]
 
 
-class PollBoxAdmin(admin.ModelAdmin):
+class PollBoxAdmin(PublishableAdmin):
     prepopulated_fields = {"slug": ["name"]}
     list_display = ['name', 'date_available', 'published']
     list_filter = ['date_available', 'published']
@@ -101,33 +92,13 @@ class PollBoxAdmin(admin.ModelAdmin):
             'fields': ('published', 'date_available')}),
     )
 
-    def save_model(self, request, obj, form, change):
-        User = get_user_model()
-        try:
-            if obj.user:
-                pass
-        except User.DoesNotExist:
-            obj.user = request.user
 
-        super(PollBoxAdmin, self).save_model(request, obj, form, change)
-
-
-class PollConfigAdmin(admin.ModelAdmin):
+class PollConfigAdmin(PublishableAdmin):
     list_display = ['key','key_group', 'channel', 'date_insert', 'date_available', 'published']
     list_filter = ["key", 'key_group', "channel", "published"]
     search_fields = ["key", "key_group", "value"]
     raw_id_fields = ['poll', 'channel', 'article']
     exclude = ('user',)
-
-    def save_model(self, request, obj, form, change):
-        User = get_user_model()
-        try:
-            if obj.user:
-                pass
-        except User.DoesNotExist:
-            obj.user = request.user
-
-        super(PollConfigAdmin, self).save_model(request, obj, form, change)
 
 
 admin.site.register(Poll, PollAdmin)
