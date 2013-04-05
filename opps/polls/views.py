@@ -98,6 +98,9 @@ class PollDetail(DetailView):
         elif self.kwargs.get('result') and not self.object.show_results:
             self.template_name_suffix = "_closed"
 
+        if self.request.is_ajax():
+            self.template_name_suffix += "_ajax"
+
         if hasattr(self.object, '_meta'):
             app_label = self.object._meta.app_label
             object_name = self.object._meta.object_name.lower()
