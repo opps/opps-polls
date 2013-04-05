@@ -53,7 +53,7 @@ class Poll(Publishable):
 
     tags = TaggableManager(blank=True)
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
-    position  = models.IntegerField(_(u"Position"), default=0)
+    order  = models.IntegerField(_(u"Order"), default=0)
     show_results = models.BooleanField(_(u"Show results page"), default=True)
 
 
@@ -113,7 +113,7 @@ class Poll(Publishable):
     objects = PollManager()
 
     class Meta:
-        ordering = ['position']
+        ordering = ['order']
 
 
 class PollPost(models.Model):
@@ -138,7 +138,7 @@ class Choice(models.Model):
                             verbose_name=_(u'Choice Image'), blank=True,
                             null=True, on_delete=models.SET_NULL,
                             related_name='choice_image')
-    position  = models.IntegerField(_(u"Position"), default=0)
+    order  = models.IntegerField(_(u"Order"), default=0)
 
     def __unicode__(self):
         return self.choice
@@ -151,7 +151,7 @@ class Choice(models.Model):
         return float(self.votes) / float(self.poll.vote_count) * 100
 
     class Meta:
-        ordering = ['position']
+        ordering = ['order']
 
 
 class PollBox(BaseBox):

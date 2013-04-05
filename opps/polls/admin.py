@@ -25,7 +25,7 @@ class ChoiceInline(admin.TabularInline):
     raw_id_fields = ['image']
     action = None
     extra = 1
-    fieldsets = [(None, {'fields': ('choice', 'image', 'position', 'votes')})]
+    fieldsets = [(None, {'fields': ('choice', 'image', 'order', 'votes')})]
 
 
 class PollPostInline(admin.TabularInline):
@@ -57,7 +57,7 @@ class PollAdmin(PublishableAdmin):
         (_(u'Publication'), {
             'classes': ('extrapretty'),
             'fields': ('published', 'date_available', 'date_end',
-                'position', 'multiple_choices','max_multiple_choices',
+                'order', 'multiple_choices','max_multiple_choices',
                 'min_multiple_choices','display_choice_images',
                 'show_results')}),
     )
