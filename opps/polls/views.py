@@ -10,8 +10,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from opps.channels.models import Channel
-from .models import Poll, Choice
-from .forms import SingleChoiceForm, MultipleChoiceForm
+from .models import Poll
 from .utils import CookedResponse
 
 # IS THERE A BETTER WAY?
@@ -19,6 +18,7 @@ if not 'endless_pagination' in settings.INSTALLED_APPS:
     settings.INSTALLED_APPS += (
         'endless_pagination',
     )
+
 
 class PollList(ListView):
 
@@ -66,10 +66,10 @@ class ChannelPollList(ListView):
         long_slug = self.kwargs['channel__long_slug'][:-1]
         get_object_or_404(Channel, long_slug=long_slug)
         return Poll.objects.filter(
-                   channel__long_slug=long_slug,
-                   published=True,
-                   date_available__lte=timezone.now()
-               )
+            channel__long_slug=long_slug,
+            published=True,
+            date_available__lte=timezone.now()
+        )
 
 
 class PollDetail(DetailView):
@@ -133,7 +133,6 @@ class PollDetail(DetailView):
             app_label, self.kwargs['slug']
         ))
 
-
         # The least-specific option is the default <app>/<model>_detail.html;
         # only use this if the object in question is a model.
         if hasattr(self.object, '_meta'):
@@ -155,18 +154,19 @@ class PollDetail(DetailView):
         self.voted = False
         self.site = get_current_site(self.request)
         return get_object_or_404(
-                   Poll,
-                   slug=self.kwargs['slug'],
-                   published=True,
-                   date_available__lte=timezone.now()
-               )
+            Poll,
+            slug=self.kwargs['slug'],
+            published=True,
+            date_available__lte=timezone.now()
+        )
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = super(PollDetail, self).get_context_data(**kwargs)
 
         #already voted send the voted object to template
-        if request.COOKIES.has_key(self.object.cookie_name):
+        #if request.COOKIES.has_key(self.object.cookie_name):
+        if self.object.cookie_name in request.COOKIES:
             choices = request.COOKIES[self.object.cookie_name]
             self.voted = context['voted'] = self.object.get_voted_choices(choices)
         return self.render_to_response(context)
@@ -183,7 +183,8 @@ class PollDetail(DetailView):
             return self.render_to_response(context)
 
         # check if already voted
-        if request.COOKIES.has_key(self.object.cookie_name):
+        # if request.COOKIES.has_key(self.object.cookie_name):
+        if self.object.cookie_name in request.COOKIES:
             context['error'] = _(u"You already voted on this poll")
             return self.render_to_response(context)
 

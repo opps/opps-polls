@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models import Sum, Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
+
 
 from taggit.managers import TaggableManager
 
@@ -18,44 +20,61 @@ class PollManager(PublishableManager):
             date_available__lte=timezone.now(),
             published=True
         ).filter(
-           Q(date_end__gte=timezone.now()) | Q(date_end__isnull=True)
+            Q(date_end__gte=timezone.now()) | Q(date_end__isnull=True)
         )
+
 
 class Poll(Publishable):
 
     question = models.CharField(_(u"Question"), max_length=255)
-    multiple_choices = models.BooleanField(_(u"Allow multiple choices"),
-        default=False)
+    multiple_choices = models.BooleanField(
+        _(u"Allow multiple choices"),
+        default=False
+    )
     max_multiple_choices = models.PositiveIntegerField(
-                                    _(u"Max number of selected choices"),
-                                    blank=True, null=True)
+        _(u"Max number of selected choices"),
+        blank=True,
+        null=True
+    )
     min_multiple_choices = models.PositiveIntegerField(
-                                    _(u"Min number of selected choices"),
-                                    blank=True, null=True)
-    display_choice_images = models.BooleanField(_(u"Display Choice images"),
-        default=False)
-
-    slug = models.SlugField(_(u"URL"), max_length=150, unique=True,
-                            db_index=True)
-
+        _(u"Min number of selected choices"),
+        blank=True,
+        null=True
+    )
+    display_choice_images = models.BooleanField(
+        _(u"Display Choice images"),
+        default=False
+    )
+    slug = models.SlugField(
+        _(u"URL"),
+        max_length=150,
+        unique=True,
+        db_index=True
+    )
     headline = models.TextField(_(u"Headline"), blank=True)
-
-    channel = models.ForeignKey('channels.Channel', null=True, blank=True,
-                                on_delete=models.SET_NULL)
-    posts = models.ManyToManyField('articles.Post', null=True, blank=True,
-                                   related_name='poll_post',
-                                   through='PollPost')
-
-    main_image = models.ForeignKey('images.Image',
-                                   verbose_name=_(u'Poll Image'), blank=True,
-                                   null=True, on_delete=models.SET_NULL,
-                                   related_name='poll_image')
-
+    channel = models.ForeignKey(
+        'channels.Channel',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+    posts = models.ManyToManyField(
+        'articles.Post', null=True, blank=True,
+        related_name='poll_post',
+        through='PollPost'
+    )
+    main_image = models.ForeignKey(
+        'images.Image',
+        verbose_name=_(u'Poll Image'),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='poll_image'
+    )
     tags = TaggableManager(blank=True)
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
-    order  = models.IntegerField(_(u"Order"), default=0)
+    order = models.IntegerField(_(u"Order"), default=0)
     show_results = models.BooleanField(_(u"Show results page"), default=True)
-
 
     @property
     def is_opened(self):
@@ -88,10 +107,18 @@ class Poll(Publishable):
         return self.choice_set.filter(id__in=choices_ids)
 
     def form(self, *args, **kwargs):
+
         if self.multiple_choices:
-            return MultipleChoiceForm(self.choices, self.display_choice_images, *args, **kwargs)
+            poll_form = MultipleChoiceForm
         else:
-            return SingleChoiceForm(self.choices, self.display_choice_images, *args, **kwargs)
+            poll_form = SingleChoiceForm
+
+        return poll_form(
+            self.choices,
+            self.display_choice_images,
+            *args,
+            **kwargs
+        )
 
     def vote(self, request):
         try:
@@ -117,13 +144,22 @@ class Poll(Publishable):
 
 
 class PollPost(models.Model):
-    post = models.ForeignKey('articles.Post', verbose_name=_(u'Poll Post'), null=True,
-                             blank=True, related_name='pollpost_post',
-                             on_delete=models.SET_NULL)
-    poll = models.ForeignKey('polls.Poll', verbose_name=_(u'Poll'), null=True,
-                                   blank=True, related_name='poll',
-                                   on_delete=models.SET_NULL)
-
+    post = models.ForeignKey(
+        'articles.Post',
+        verbose_name=_(u'Poll Post'),
+        null=True,
+        blank=True,
+        related_name='pollpost_post',
+        on_delete=models.SET_NULL
+    )
+    poll = models.ForeignKey(
+        'polls.Poll',
+        verbose_name=_(u'Poll'),
+        null=True,
+        blank=True,
+        related_name='poll',
+        on_delete=models.SET_NULL
+    )
 
     def __unicode__(self):
         return u"{0}-{1}".format(self.poll.slug, self.post.slug)
@@ -134,11 +170,15 @@ class Choice(models.Model):
     poll = models.ForeignKey('polls.Poll')
     choice = models.CharField(max_length=255, null=False, blank=False)
     votes = models.IntegerField(null=True, blank=True, default=0)
-    image = models.ForeignKey('images.Image',
-                            verbose_name=_(u'Choice Image'), blank=True,
-                            null=True, on_delete=models.SET_NULL,
-                            related_name='choice_image')
-    order  = models.IntegerField(_(u"Order"), default=0)
+    image = models.ForeignKey(
+        'images.Image',
+        verbose_name=_(u'Choice Image'),
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='choice_image'
+    )
+    order = models.IntegerField(_(u"Order"), default=0)
 
     def __unicode__(self):
         return self.choice
@@ -205,5 +245,5 @@ class PollConfig(BaseConfig):
 
     class Meta:
         permissions = (("developer", "Developer"),)
-        unique_together = ("key_group", "key", "site", "channel", "article", "poll")
-
+        unique_together = ("key_group", "key", "site",
+                           "channel", "article", "poll")

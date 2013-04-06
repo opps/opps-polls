@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 
 from .models import (Poll, Choice, PollPost, PollBox,
-                    PollBoxPolls, PollConfig)
+                     PollBoxPolls, PollConfig)
 
 from opps.core.admin import PublishableAdmin
 
@@ -57,9 +55,9 @@ class PollAdmin(PublishableAdmin):
         (_(u'Publication'), {
             'classes': ('extrapretty'),
             'fields': ('published', 'date_available', 'date_end',
-                'order', 'multiple_choices','max_multiple_choices',
-                'min_multiple_choices','display_choice_images',
-                'show_results')}),
+                       'order', 'multiple_choices', 'max_multiple_choices',
+                       'min_multiple_choices', 'display_choice_images',
+                       'show_results')}),
     )
 
 
@@ -94,7 +92,8 @@ class PollBoxAdmin(PublishableAdmin):
 
 
 class PollConfigAdmin(PublishableAdmin):
-    list_display = ['key','key_group', 'channel', 'date_insert', 'date_available', 'published']
+    list_display = ['key', 'key_group', 'channel', 'date_insert',
+                    'date_available', 'published']
     list_filter = ["key", 'key_group', "channel", "published"]
     search_fields = ["key", "key_group", "value"]
     raw_id_fields = ['poll', 'channel', 'article']

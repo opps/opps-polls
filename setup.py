@@ -24,22 +24,24 @@ try:
 except:
     long_description = polls.__description__
 
-setup(name='opps-polls',
-        namespace_packages=['opps', 'opps.polls'],
-        version=polls.__version__,
-        description=polls.__description__,
-        long_description=long_description,
-        classifiers=classifiers,
-        keywords='poll opps cms django apps magazines websites',
-        author=polls.__author__,
-        author_email=polls.__email__,
-        url='http://oppsproject.org',
-        download_url="https://github.com/opps/opps-polls/tarball/master",
-        license=polls.__license__,
-        packages=find_packages(exclude=('doc', 'docs',)),
-        package_dir={'opps': 'opps'},
-        install_requires=install_requires,
-        include_package_data=True,
-        package_data={
-           'polls': ['templates/*']
-        })
+setup(
+    name='opps-polls',
+    namespace_packages=['opps', 'opps.polls'],
+    version=polls.__version__,
+    description=polls.__description__,
+    long_description=long_description,
+    classifiers=classifiers,
+    keywords='poll opps cms django apps magazines websites',
+    author=polls.__author__,
+    author_email=polls.__email__,
+    url='http://oppsproject.org',
+    download_url="https://github.com/opps/opps-polls/tarball/master",
+    license=polls.__license__,
+    packages=find_packages(exclude=('doc', 'docs',)),
+    package_dir={'opps': 'opps'},
+    install_requires=install_requires,
+    include_package_data=True,
+    package_data={
+        'polls': ['templates/*']
+    }
+)

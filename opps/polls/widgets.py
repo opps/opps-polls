@@ -5,14 +5,15 @@ from django import forms
 from itertools import chain
 from django.forms import CheckboxInput
 from django.utils.html import format_html, format_html_join
-from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_text, python_2_unicode_compatible
+
 
 class CheckboxSelectMultiple(forms.widgets.CheckboxSelectMultiple):
 
     def render(self, name, value, attrs=None, choices=()):
-        if value is None: value = []
+        if value is None:
+            value = []
         final_attrs = self.build_attrs(attrs, name=name)
         id_ = final_attrs.get('id', None)
         output = [u'<ul>']
@@ -65,7 +66,7 @@ class RadioFieldRenderer(object):
             yield RadioInput(self.name, self.value, self.attrs.copy(), choice, i)
 
     def __getitem__(self, idx):
-        choice = self.choices[idx] # Let the IndexError propogate
+        choice = self.choices[idx]  # Let the IndexError propogate
         return RadioInput(self.name, self.value, self.attrs.copy(), choice, idx)
 
     def __str__(self):
@@ -95,8 +96,9 @@ class RadioSelect(forms.widgets.Select):
 
     def get_renderer(self, name, value, attrs=None, choices=()):
         """Returns an instance of the renderer."""
-        if value is None: value = ''
-        str_value = force_text(value) # Normalize to string.
+        if value is None:
+            value = ''
+        str_value = force_text(value)  # Normalize to string.
         final_attrs = self.build_attrs(attrs)
         choices = list(chain(self.choices, choices))
         return self.renderer(name, str_value, final_attrs, choices)

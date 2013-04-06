@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+
 from django import template
+from django.conf import settings
+from django.utils import timezone
 from opps.polls.models import Poll, PollBox, PollConfig
 
 register = template.Library()
@@ -31,27 +34,27 @@ def get_poll(slug, relation='channel', template_name=None):
                 channel__slug=slug,
                 published=True,
                 date_available__lte=timezone.now()
-                ).latest('date_insert')
+            ).latest('date_insert')
         else:
             # get latest poll for the channel
             poll = Poll.objects.filter(
                 channel__slug=slug,
                 published=True,
                 date_available__lte=timezone.now()
-                ).latest('date_insert')
+            ).latest('date_insert')
     elif relation == 'post':
         poll = Poll.objects.filter(
             posts__slug=slug,
             published=True,
             date_available__lte=timezone.now()
-            ).latest('date_insert')
+        ).latest('date_insert')
 
     return t.render(template.Context({'poll': poll}))
 
 
 @register.simple_tag
 def get_active_polls(number=5, channel_slug=None,
-                template_name='polls/actives.html'):
+                     template_name='polls/actives.html'):
 
     active_polls = Poll.objects.all_opened()
     if channel_slug:
@@ -65,6 +68,7 @@ def get_active_polls(number=5, channel_slug=None,
                                       'channel_slug': channel_slug,
                                       'number': number}))
 
+
 @register.simple_tag
 def get_pollbox(slug, channel_slug=None, template_name=None):
     if channel_slug:
@@ -72,8 +76,8 @@ def get_pollbox(slug, channel_slug=None, template_name=None):
 
     try:
         box = PollBox.objects.get(site=settings.SITE_ID, slug=slug,
-                                     date_available__lte=timezone.now(),
-                                     published=True)
+                                  date_available__lte=timezone.now(),
+                                  published=True)
     except PollBox.DoesNotExist:
         box = None
 
@@ -87,9 +91,9 @@ def get_pollbox(slug, channel_slug=None, template_name=None):
 @register.simple_tag
 def get_all_pollbox(channel_slug, template_name=None):
     boxes = PollBox.objects.filter(site=settings.SITE_ID,
-                                      date_available__lte=timezone.now(),
-                                      published=True,
-                                      channel__slug=channel_slug)
+                                   date_available__lte=timezone.now(),
+                                   published=True,
+                                   channel__slug=channel_slug)
 
     t = template.loader.get_template('polls/pollbox_list.html')
     if template_name:

@@ -13,16 +13,16 @@ class SingleChoiceForm(forms.Form):
 
         if display_choice_images:
             choices_list = [
-              (choice.id, u"<img src='{0}' > {1}".format(
-                choice.image.image.url if choice.image else '#', choice.choice
+                (choice.id, u"<img src='{0}' > {1}".format(
+                    choice.image.image.url if choice.image else '#', choice.choice
                 )) for choice in choices
             ]
         else:
             choices_list = [(choice.id, choice.choice) for choice in choices]
 
         self.fields['choices'] = forms.ChoiceField(
-                widget=RadioSelect,
-                choices=choices_list
+            widget=RadioSelect,
+            choices=choices_list
         )
 
 
@@ -33,14 +33,14 @@ class MultipleChoiceForm(forms.Form):
 
         if display_choice_images:
             choices_list = [
-              (choice.id, u"<img src='{0}' > {1}".format(
-                  choice.image.image.url if choice.image else '#', choice.choice
-                  )) for choice in choices
+                (choice.id, u"<img src='{0}' > {1}".format(
+                    choice.image.image.url if choice.image else '#', choice.choice
+                )) for choice in choices
             ]
         else:
             choices_list = [(choice.id, choice.choice) for choice in choices]
 
         self.fields['choices'] = forms.MultipleChoiceField(
-                widget=CheckboxSelectMultiple,
-                choices=choices_list
+            widget=CheckboxSelectMultiple,
+            choices=choices_list
         )
