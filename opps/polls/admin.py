@@ -54,10 +54,10 @@ class PollAdmin(PublishableAdmin):
             'fields': ('channel',)}),
         (_(u'Publication'), {
             'classes': ('extrapretty'),
-            'fields': ('published', 'date_available', 'date_end',
-                       'order', 'multiple_choices', 'max_multiple_choices',
-                       'min_multiple_choices', 'display_choice_images',
-                       'show_results')}),
+            'fields': ('published', ('date_available', 'date_end'),
+                       'order', 'multiple_choices', ('max_multiple_choices',
+                       'min_multiple_choices'), ('display_choice_images',
+                       'show_results'))}),
     )
 
 
@@ -84,7 +84,7 @@ class PollBoxAdmin(PublishableAdmin):
         (_(u'Identification'), {
             'fields': ('site', 'name', 'slug')}),
         (_(u'Relationships'), {
-            'fields': ('channel', 'article')}),
+            'fields': (('channel', 'article'),)}),
         (_(u'Publication'), {
             'classes': ('extrapretty'),
             'fields': ('published', 'date_available')}),
