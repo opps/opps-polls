@@ -14,6 +14,7 @@ def get_poll(slug, relation='channel', template_name=None):
     {% get_poll 'channel_slug' relation='channel' %}
     {% get_poll 'post_slug' relation='post' %}
     """
+
     poll = None
     t = template.loader.get_template('polls/poll_detail_ajax.html')
     if template_name:
@@ -28,27 +29,25 @@ def get_poll(slug, relation='channel', template_name=None):
         channel: Channel (object)
         """
         poll_slug = PollConfig.get_value('poll_slug', channel__slug=slug)
+        # get latest poll for the channel
+        poll = Poll.objects.filter(
+            channel__slug=slug,
+            published=True,
+            date_available__lte=timezone.now()
+        )
         if poll_slug:
             poll = Poll.objects.filter(
                 slug=poll_slug,
                 channel__slug=slug,
                 published=True,
                 date_available__lte=timezone.now()
-            ).latest('date_insert')
-        else:
-            # get latest poll for the channel
-            poll = Poll.objects.filter(
-                channel__slug=slug,
-                published=True,
-                date_available__lte=timezone.now()
-            ).latest('date_insert')
+            )
     elif relation == 'post':
         poll = Poll.objects.filter(
             posts__slug=slug,
             published=True,
             date_available__lte=timezone.now()
-        ).latest('date_insert')
-
+        )
     return t.render(template.Context({'poll': poll}))
 
 
