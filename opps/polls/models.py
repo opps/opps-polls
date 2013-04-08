@@ -188,7 +188,10 @@ class Choice(models.Model):
 
     @property
     def percentage(self):
-        return float(self.votes) / float(self.poll.vote_count) * 100
+        try:
+            return float(self.votes) / float(self.poll.vote_count) * 100
+        except ZeroDivisionError:
+            return 0
 
     class Meta:
         ordering = ['order']
