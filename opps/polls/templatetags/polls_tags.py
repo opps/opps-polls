@@ -34,20 +34,20 @@ def get_poll(slug, relation='channel', template_name=None):
             channel__slug=slug,
             published=True,
             date_available__lte=timezone.now()
-        )
+        ).latest('date_insert')
         if poll_slug:
             poll = Poll.objects.filter(
                 slug=poll_slug,
                 channel__slug=slug,
                 published=True,
                 date_available__lte=timezone.now()
-            )
+            ).latest('date_insert')
     elif relation == 'post':
         poll = Poll.objects.filter(
             posts__slug=slug,
             published=True,
             date_available__lte=timezone.now()
-        )
+        ).latest('date_insert')
     return t.render(template.Context({'poll': poll}))
 
 
