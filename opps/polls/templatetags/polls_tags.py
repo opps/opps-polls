@@ -30,24 +30,33 @@ def get_poll(slug, relation='channel', template_name=None):
         """
         poll_slug = PollConfig.get_value('poll_slug', channel__slug=slug)
         # get latest poll for the channel
-        poll = Poll.objects.filter(
-            channel__slug=slug,
-            published=True,
-            date_available__lte=timezone.now()
-        ).latest('date_insert')
-        if poll_slug:
+        try:
             poll = Poll.objects.filter(
-                slug=poll_slug,
                 channel__slug=slug,
                 published=True,
                 date_available__lte=timezone.now()
             ).latest('date_insert')
+        except Poll.DoesNotExist:
+            poll = []
+        if poll_slug:
+            try:
+                poll = Poll.objects.filter(
+                    slug=poll_slug,
+                    channel__slug=slug,
+                    published=True,
+                    date_available__lte=timezone.now()
+                ).latest('date_insert')
+            except Poll.DoesNotExist:
+                poll = []
     elif relation == 'post':
-        poll = Poll.objects.filter(
-            posts__slug=slug,
-            published=True,
-            date_available__lte=timezone.now()
-        ).latest('date_insert')
+        try:
+            poll = Poll.objects.filter(
+                posts__slug=slug,
+                published=True,
+                date_available__lte=timezone.now()
+            ).latest('date_insert')
+        except Poll.DoesNotExist:
+            poll = []
     return t.render(template.Context({'poll': poll}))
 
 
