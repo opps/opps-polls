@@ -8,8 +8,8 @@ from opps.polls.models import Poll, PollBox, PollConfig
 register = template.Library()
 
 
-@register.simple_tag
-def get_poll(slug, relation='channel', template_name=None):
+@register.simple_tag(takes_context=True)
+def get_poll(context, slug, relation='channel', template_name=None):
     """
     {% get_poll 'channel_slug' relation='channel' %}
     {% get_poll 'post_slug' relation='post' %}
@@ -57,7 +57,7 @@ def get_poll(slug, relation='channel', template_name=None):
             ).latest('date_insert')
         except Poll.DoesNotExist:
             poll = []
-    return t.render(template.Context({'poll': poll}))
+    return t.render(template.Context({'poll': poll, 'context': context}))
 
 
 @register.simple_tag
