@@ -55,9 +55,9 @@ class PollAdmin(PublishableAdmin):
         (_(u'Publication'), {
             'classes': ('extrapretty'),
             'fields': ('published', ('date_available', 'date_end'),
-                       'order', 'multiple_choices', ('max_multiple_choices',
-                       'min_multiple_choices'), ('display_choice_images',
-                       'show_results'))}),
+                       'order', 'multiple_choices', ('min_multiple_choices',
+                       'max_multiple_choices'), 'display_choice_images',
+                       'show_results')}),
     )
 
 
