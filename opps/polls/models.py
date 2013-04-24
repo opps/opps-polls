@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.db import models
 from django.db.models import Sum, Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 
 
 from taggit.managers import TaggableManager
@@ -11,6 +13,9 @@ from taggit.managers import TaggableManager
 from opps.core.models import Publishable, PublishableManager, BaseBox, BaseConfig
 
 from .forms import MultipleChoiceForm, SingleChoiceForm
+
+
+app_namespace = getattr(settings, 'OPPS_POLLS_URL_NAMESPACE', 'polls')
 
 
 class PollManager(PublishableManager):
@@ -133,6 +138,12 @@ class Poll(Publishable):
             choice.save()
 
         return choices
+
+    def get_absolute_url(self):
+        return reverse(
+            '{0}:open_poll'.format(app_namespace),
+            kwargs={'slug': self.slug}
+        )
 
     def __unicode__(self):
         return self.question
