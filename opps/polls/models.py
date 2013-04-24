@@ -145,6 +145,9 @@ class Poll(Publishable):
             kwargs={'slug': self.slug}
         )
 
+    def get_thumb(self):
+        return self.main_image
+
     def __unicode__(self):
         return self.question
 
