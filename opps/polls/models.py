@@ -149,6 +149,10 @@ class Poll(Publishable):
         return self.main_image
 
     @property
+    def search_category(self):
+        return _("Poll")
+
+    @property
     def title(self):
         """should have a title property for search template"""
         return self.question

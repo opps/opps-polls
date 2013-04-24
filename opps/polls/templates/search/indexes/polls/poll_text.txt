@@ -1,0 +1,8 @@
+{{ object.title }}
+{{ object.title|slugfy }}
+{{ object.title|safe }}
+{{ object.title|striptags }}
+{{ object.headline }}
+{{ object.headline|slugfy }}
+{{ object.headline|safe }}
+{{ object.headline|striptags }}
