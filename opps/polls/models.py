@@ -148,6 +148,11 @@ class Poll(Publishable):
     def get_thumb(self):
         return self.main_image
 
+    @property
+    def title(self):
+        """should have a title property for search template"""
+        return self.question
+
     def __unicode__(self):
         return self.question
 
