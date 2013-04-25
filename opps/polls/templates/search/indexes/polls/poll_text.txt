@@ -6,3 +6,7 @@
 {{ object.headline|slugify }}
 {{ object.headline|safe }}
 {{ object.headline|striptags }}
+{% for tag in object.tags.all %}
+{{tag.name}}\n
+{{tag.name|slugify }}\n
+{% endfor %}
