@@ -1,8 +1,8 @@
 {{ object.title }}
-{{ object.title|slugfy }}
+{{ object.title|slugify }}
 {{ object.title|safe }}
 {{ object.title|striptags }}
 {{ object.headline }}
-{{ object.headline|slugfy }}
+{{ object.headline|slugify }}
 {{ object.headline|safe }}
 {{ object.headline|striptags }}
