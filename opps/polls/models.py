@@ -13,6 +13,7 @@ from taggit.managers import TaggableManager
 from opps.core.models import Publishable, PublishableManager, BaseBox, BaseConfig
 
 from .forms import MultipleChoiceForm, SingleChoiceForm
+from opps.core.models import Slugged
 
 
 app_namespace = getattr(settings, 'OPPS_POLLS_URL_NAMESPACE', 'polls')
@@ -29,7 +30,7 @@ class PollManager(PublishableManager):
         )
 
 
-class Poll(Publishable):
+class Poll(Publishable, Slugged):
 
     question = models.CharField(_(u"Question"), max_length=255)
     multiple_choices = models.BooleanField(
@@ -49,12 +50,6 @@ class Poll(Publishable):
     display_choice_images = models.BooleanField(
         _(u"Display Choice images"),
         default=False
-    )
-    slug = models.SlugField(
-        _(u"URL"),
-        max_length=150,
-        unique=True,
-        db_index=True
     )
     headline = models.TextField(_(u"Headline"), blank=True)
     channel = models.ForeignKey(

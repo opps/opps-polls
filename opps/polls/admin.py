@@ -47,7 +47,7 @@ class PollAdmin(PublishableAdmin):
 
     fieldsets = (
         (_(u'Identification'), {
-            'fields': ('question', 'slug')}),
+            'fields': ('site', 'question', 'slug')}),
         (_(u'Content'), {
             'fields': ('headline', 'main_image', 'tags')}),
         (_(u'Relationships'), {
