@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -7,6 +8,7 @@ from .models import (Poll, Choice, PollPost, PollBox,
                      PollBoxPolls, PollConfig)
 
 from opps.core.admin import PublishableAdmin
+from opps.core.admin import apply_rules
 
 from redactor.widgets import RedactorEditor
 
@@ -59,6 +61,12 @@ class PollAdmin(PublishableAdmin):
                        'max_multiple_choices'), 'display_choice_images',
                        'show_results')}),
     )
+
+
+OPPS_ADMIN_RULES = getattr(settings, 'OPPS_ADMIN_RULES', {})
+polls_admin_rules = OPPS_ADMIN_RULES.get('polls.PollAdmin')
+if polls_admin_rules:
+    PollAdmin = apply_rules(PollAdmin, polls_admin_rules)
 
 
 class PollBoxPollsInline(admin.TabularInline):
