@@ -11,4 +11,4 @@ __author__ = u"Bruno Cezar Rocha"
 __credits__ = []
 __email__ = u"rochacbruno@gmail.com"
 __license__ = u"MIT License"
-__copyright__ = u"Copyright 2013, YACOWS"
+__copyright__ = u"Copyright 2013, Opps Projects"
