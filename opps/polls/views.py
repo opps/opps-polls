@@ -171,7 +171,7 @@ class PollDetail(DetailView):
             self.voted = context['voted'] = self.object.get_voted_choices(choices)
 
         if self.object.channel:
-            context['channel'] = self.channel
+            context['channel'] = self.object.channel
 
         return self.render_to_response(context)
 
