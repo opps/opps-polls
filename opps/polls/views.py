@@ -169,6 +169,10 @@ class PollDetail(DetailView):
         if self.object.cookie_name in request.COOKIES:
             choices = request.COOKIES[self.object.cookie_name]
             self.voted = context['voted'] = self.object.get_voted_choices(choices)
+
+        if self.object.channel:
+            context['channel'] = self.channel
+
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
