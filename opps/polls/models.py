@@ -71,7 +71,7 @@ class Poll(Publishable, Slugged):
         on_delete=models.SET_NULL,
         related_name='poll_image'
     )
-    tags = TaggableManager(blank=True)
+    tags = TaggableManager(blank=True, verbose_name=u'Tags')
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
     order = models.IntegerField(_(u"Order"), default=0)
     show_results = models.BooleanField(_(u"Show results page"), default=True)
