@@ -77,9 +77,10 @@ def get_active_polls(number=5, channel_slug=None,
                                       'number': number}))
 
 
-@register.simple_tag
-def get_pollbox(slug=None, channel_slug=None,
-                template_name='polls/pollbox_detail.html'):
+@register.simple_tag(takes_context=True)
+def get_pollbox(context, slug=None, channel_slug=None,
+                template_name='polls/pollbox_detail.html',
+                **kwargs):
 
     if slug and channel_slug:
         slug = u"{0}-{1}".format(slug, channel_slug)
@@ -106,7 +107,15 @@ def get_pollbox(slug=None, channel_slug=None,
 
     t = template.loader.get_template(template_name)
 
-    return t.render(template.Context({'pollbox': box, 'slug': slug}))
+    inner_context = {
+        'pollbox': box,
+        'slug': slug,
+        'context': context
+    }
+    if kwargs:
+        inner_context.update(kwargs)
+
+    return t.render(template.Context(inner_context))
 
 
 @register.simple_tag
