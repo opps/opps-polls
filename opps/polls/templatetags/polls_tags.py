@@ -78,20 +78,33 @@ def get_active_polls(number=5, channel_slug=None,
 
 
 @register.simple_tag
-def get_pollbox(slug, channel_slug=None, template_name=None):
-    if channel_slug:
+def get_pollbox(slug=None, channel_slug=None,
+                template_name='polls/pollbox_detail.html'):
+
+    if slug and channel_slug:
         slug = u"{0}-{1}".format(slug, channel_slug)
 
-    try:
-        box = PollBox.objects.get(site=settings.SITE_ID, slug=slug,
-                                  date_available__lte=timezone.now(),
-                                  published=True)
-    except PollBox.DoesNotExist:
+    lookup = dict(
+        site=settings.SITE_ID,
+        date_available__lte=timezone.now(),
+        published=True
+    )
+
+    if slug:
+        # get the first box with specific slug
+        lookup['slug'] = slug
+    elif channel_slug:
+        # get the first box of a channel
+        lookup['channel_long_slug'] = channel_slug
+
+    box = PollBox.objects.filter(**lookup)
+
+    if box:
+        box = box.latest('date_available')
+    else:
         box = None
 
-    t = template.loader.get_template('polls/pollbox_detail.html')
-    if template_name:
-        t = template.loader.get_template(template_name)
+    t = template.loader.get_template(template_name)
 
     return t.render(template.Context({'pollbox': box, 'slug': slug}))
 
