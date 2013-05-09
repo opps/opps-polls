@@ -86,7 +86,7 @@ class PollBoxAdmin(PublishableAdmin):
         (_(u'Identification'), {
             'fields': ('site', 'name', 'slug')}),
         (_(u'Relationships'), {
-            'fields': (('channel', 'article'),)}),
+            'fields': ('channel',)}),
         (_(u'Publication'), {
             'classes': ('extrapretty'),
             'fields': ('published', 'date_available')}),
