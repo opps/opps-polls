@@ -1,4 +1,4 @@
-{% load thumbor_tags %}
+{% load images_tags %}
 
  <a href="{% url 'polls:list_poll'%}">< All polls </a><br/>
  Opps Poll Detail
@@ -7,7 +7,7 @@
 <div>{{ poll.headline|safe }}</div>
 
 {% if poll.main_image %}
-<img src="{% thumbor_url poll.main_image.image.url width=100 %}" />
+<img src="{% image_url poll.main_image.image.url width=100 %}" />
 {% endif %}
 
 {% if error %}
