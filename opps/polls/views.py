@@ -85,7 +85,7 @@ class PollDetail(DetailView):
         names = []
 
         if self.voted:
-            self.template_name_suffix = "_voted"
+            self.template_name_suffix = "_result"
 
         # decide if show results page
         if not self.object.is_opened and self.object.show_results:
