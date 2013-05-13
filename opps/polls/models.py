@@ -228,12 +228,14 @@ class PollBox(BaseBox):
     def ordered_polls(self, field='order'):
         now = timezone.now()
         qs = self.polls.filter(
+            published=True,
+            date_available__lte=now,
             pollboxpolls_polls__date_available__lte=now
         ).filter(
             models.Q(pollboxpolls_polls__date_end__gte=now) |
             models.Q(pollboxpolls_polls__date_end__isnull=True)
         )
-        return qs.order_by('pollboxpolls_polls__order')
+        return qs.order_by('pollboxpolls_polls__order').distinct()
 
 
 class PollBoxPolls(models.Model):
