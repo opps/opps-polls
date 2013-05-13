@@ -159,6 +159,7 @@ class Poll(Publishable, Slugged):
 
     class Meta:
         ordering = ['order']
+        unique_together = ['site', 'slug']
 
 
 class PollPost(models.Model):
@@ -224,6 +225,16 @@ class PollBox(BaseBox):
         through='polls.PollBoxPolls'
     )
 
+    def ordered_polls(self, field='order'):
+        now = timezone.now()
+        qs = self.polls.filter(
+            pollboxpolls_polls__date_available__lte=now
+        ).filter(
+            models.Q(pollboxpolls_polls__date_end__gte=now) |
+            models.Q(pollboxpolls_polls__date_end__isnull=True)
+        )
+        return qs.order_by('pollboxpolls_polls__order')
+
 
 class PollBoxPolls(models.Model):
     pollbox = models.ForeignKey(
@@ -241,6 +252,14 @@ class PollBoxPolls(models.Model):
         verbose_name=_(u'Poll'),
     )
     order = models.PositiveIntegerField(_(u'Order'), default=0)
+    date_available = models.DateTimeField(_(u"Date available"),
+                                          default=timezone.now, null=True)
+    date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
+
+    class Meta:
+        ordering = ('order',)
+        verbose_name = _('Poll box polls')
+        verbose_name_plural = _('Poll boxes polls')
 
     def __unicode__(self):
         return u"{0}-{1}".format(self.pollbox.slug, self.poll.slug)

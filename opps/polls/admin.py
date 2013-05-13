@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils import timezone
 from .models import (Poll, Choice, PollPost, PollBox,
                      PollBoxPolls, PollConfig)
 
@@ -71,7 +71,7 @@ class PollBoxPollsInline(admin.TabularInline):
     extra = 1
     fieldsets = [(None, {
         'classes': ('collapse',),
-        'fields': ('poll', 'order')})]
+        'fields': ('poll', 'order', 'date_available', 'date_end')})]
 
 
 class PollBoxAdmin(PublishableAdmin):
@@ -91,6 +91,18 @@ class PollBoxAdmin(PublishableAdmin):
             'classes': ('extrapretty'),
             'fields': ('published', 'date_available')}),
     )
+
+    def clean_ended_entries(self, request, queryset):
+        now = timezone.now()
+        for box in queryset:
+            ended = box.pollboxpolls_pollboxes.filter(
+                date_end__lt=now
+            )
+            if ended:
+                ended.delete()
+    clean_ended_entries.short_description = _(u'Clean ended polls')
+
+    actions = ('clean_ended_entries',)
 
 
 class PollConfigAdmin(PublishableAdmin):
