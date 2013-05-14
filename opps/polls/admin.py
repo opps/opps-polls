@@ -10,6 +10,7 @@ from opps.core.admin import PublishableAdmin
 from opps.core.admin import apply_opps_rules
 
 from redactor.widgets import RedactorEditor
+from opps.images.generate import image_url
 
 
 class PollAdminForm(forms.ModelForm):
@@ -24,7 +25,16 @@ class ChoiceInline(admin.TabularInline):
     raw_id_fields = ['image']
     action = None
     extra = 1
-    fieldsets = [(None, {'fields': ('choice', 'image', 'order', 'votes')})]
+    fieldsets = [(None, {'fields': ('choice', ('image', 'image_thumb'), 'order', 'votes')})]
+    readonly_fields = ['image_thumb']
+
+    def image_thumb(self, obj):
+        if obj.image:
+            return u'<img width="60px" height="60px" src="{0}" />'.format(
+                image_url(obj.image.image.url, width=60, height=60))
+        return _(u'No Image')
+    image_thumb.short_description = _(u'Thumbnail')
+    image_thumb.allow_tags = True
 
 
 class PollPostInline(admin.TabularInline):
@@ -46,12 +56,13 @@ class PollAdmin(PublishableAdmin):
     exclude = ('user',)
     raw_id_fields = ['main_image', 'channel']
     inlines = [ChoiceInline, PollPostInline]
+    readonly_fields = ['image_thumb']
 
     fieldsets = (
         (_(u'Identification'), {
             'fields': ('site', 'question', 'slug')}),
         (_(u'Content'), {
-            'fields': ('headline', 'main_image', 'tags')}),
+            'fields': ('headline', ('main_image', 'image_thumb'), 'tags')}),
         (_(u'Relationships'), {
             'fields': ('channel',)}),
         (_(u'Publication'), {
@@ -61,6 +72,14 @@ class PollAdmin(PublishableAdmin):
                        'max_multiple_choices'), 'display_choice_images',
                        'show_results')}),
     )
+
+    def image_thumb(self, obj):
+        if obj.main_image:
+            return u'<img width="60px" height="60px" src="{0}" />'.format(
+                image_url(obj.main_image.image.url, width=60, height=60))
+        return _(u'No Image')
+    image_thumb.short_description = _(u'Thumbnail')
+    image_thumb.allow_tags = True
 
 
 class PollBoxPollsInline(admin.TabularInline):
