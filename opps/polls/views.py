@@ -153,7 +153,7 @@ class PollDetail(DetailView):
     def get_object(self):
         self.voted = False
         self.site = get_current_site(self.request)
-        filters = dict(slug=self.kwargs['slug'])
+        filters = dict(slug=self.kwargs['slug'], site=self.site)
         preview_enabled = self.request.user and self.request.user.is_staff
         if not preview_enabled:
             filters['date_available__lte'] = timezone.now()
