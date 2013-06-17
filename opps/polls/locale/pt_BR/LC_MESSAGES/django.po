@@ -5,11 +5,12 @@
 # Translators:
 # josene <jsene@yacows.com.br>, 2013
 # Bruno Rocha <rochacbruno@gmail.com>, 2013
+# Ellison Leão <ellisonleao@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: opps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-12 12:12-0300\n"
+"POT-Creation-Date: 2013-06-17 14:20-0300\n"
 "PO-Revision-Date: 2013-04-26 18:10+0000\n"
 "Last-Translator: josene <jsene@yacows.com.br>\n"
 "Language-Team: Portuguese (Brazil) <opps-developers@googlegroups.com>\n"
@@ -83,11 +84,11 @@ msgstr "Notícias"
 msgid "Poll Image"
 msgstr "Imagem da enquete"
 
-#: models.py:77 models.py:271
+#: models.py:77 models.py:275
 msgid "End date"
 msgstr "Data de finalização"
 
-#: models.py:78 models.py:207 models.py:268
+#: models.py:78 models.py:209 models.py:272
 msgid "Order"
 msgstr "Ordem"
 
@@ -95,12 +96,12 @@ msgstr "Ordem"
 msgid "Show results page"
 msgstr "Exibir página de resultados"
 
-#: models.py:150 models.py:165 models.py:180 models.py:196 models.py:266
-#: models.py:294
+#: models.py:150 models.py:165 models.py:180 models.py:196 models.py:270
+#: models.py:298
 msgid "Poll"
 msgstr "Enquete"
 
-#: models.py:166 models.py:233
+#: models.py:166 models.py:237
 msgid "Polls"
 msgstr "Enquetes"
 
@@ -112,43 +113,55 @@ msgstr "Posts da enquete"
 msgid "Polls Posts"
 msgstr "Posts da enquetes"
 
-#: models.py:201
+#: models.py:198 models.py:226
+msgid "Choice"
+msgstr "Opção"
+
+#: models.py:200
+msgid "Votes"
+msgstr "Votos"
+
+#: models.py:203
 msgid "Choice Image"
 msgstr "Imagem da opção"
 
-#: models.py:249
+#: models.py:227
+msgid "Choices"
+msgstr "Opções"
+
+#: models.py:253
 msgid "Poll box"
 msgstr "Box de enquete"
 
-#: models.py:250
+#: models.py:254
 msgid "Poll boxes"
 msgstr "Boxes de enquete"
 
-#: models.py:259
+#: models.py:263
 msgid "Poll Box"
 msgstr "Box de enquete"
 
-#: models.py:269
+#: models.py:273
 msgid "Date available"
 msgstr "Data de publicação"
 
-#: models.py:275
+#: models.py:279
 msgid "Poll box polls"
 msgstr "Boxes de enquete"
 
-#: models.py:276
+#: models.py:280
 msgid "Poll boxes polls"
 msgstr "Boxes de enquetes"
 
-#: models.py:284
+#: models.py:288
 msgid "Poll not published!"
 msgstr "Enquete não publicada!"
 
-#: models.py:301
+#: models.py:305
 msgid "Poll Config"
 msgstr "Config de enquete"
 
-#: models.py:302
+#: models.py:306
 msgid "Poll Configs"
 msgstr "Configs de enquete"
 

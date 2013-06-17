@@ -194,8 +194,10 @@ class PollPost(models.Model):
 class Choice(models.Model):
 
     poll = models.ForeignKey('polls.Poll', verbose_name=_(u'Poll'))
-    choice = models.CharField(max_length=255, null=False, blank=False)
-    votes = models.IntegerField(null=True, blank=True, default=0)
+    choice = models.CharField(max_length=255, null=False, blank=False,
+                              verbose_name=_(u'Choice'))
+    votes = models.IntegerField(null=True, blank=True, default=0,
+                                verbose_name=_(u'Votes'))
     image = models.ForeignKey(
         'images.Image',
         verbose_name=_(u'Choice Image'),
@@ -221,6 +223,8 @@ class Choice(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = _(u'Choice')
+        verbose_name_plural = _(u'Choices')
 
 
 class PollBox(BaseBox):
