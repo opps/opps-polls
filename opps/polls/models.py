@@ -96,6 +96,13 @@ class Poll(Publishable, Slugged):
     def cookie_name(self):
         return "opps_poll_{0}".format(self.pk)
 
+    def voted(self, request):
+        if self.cookie_name in request.COOKIES:
+            choices = request.COOKIES[self.cookie_name]
+            return self.get_voted_choices(choices)
+        else:
+            return False
+
     @property
     def vote_count(self):
         return self.choices.aggregate(Sum('votes'))['votes__sum']
