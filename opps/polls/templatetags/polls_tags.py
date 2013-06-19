@@ -9,6 +9,15 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
+def is_voted(context, poll):
+    try:
+        request = context['request']
+        return 1 if poll.voted(request) else 0
+    except:
+        return 0
+
+
+@register.simple_tag(takes_context=True)
 def get_poll(context, slug, relation='channel', template_name=None):
     """
     {% get_poll 'channel_slug' relation='channel' %}
