@@ -60,13 +60,21 @@ def get_poll(context, slug, relation='channel', template_name=None):
     return t.render(template.Context({'poll': poll, 'context': context}))
 
 
-@register.simple_tag
-def get_active_polls(number=5, channel_slug=None,
-                     template_name='polls/actives.html'):
+@register.simple_tag(takes_context=True)
+def get_active_polls(context, number=5, channel_slug=None,
+                     template_name='polls/actives.html',
+                     exclude_slug=None,
+                     **kwargs):
 
     active_polls = Poll.objects.all_opened()
     if channel_slug:
         active_polls = active_polls.filter(channel__slug=channel_slug)
+
+    if kwargs:
+        active_polls = active_polls.filter(**kwargs)
+
+    if exclude_slug:
+        active_polls = active_polls.exclude(slug=exclude_slug)
 
     active_polls = active_polls[:number]
 
@@ -74,7 +82,8 @@ def get_active_polls(number=5, channel_slug=None,
 
     return t.render(template.Context({'active_polls': active_polls,
                                       'channel_slug': channel_slug,
-                                      'number': number}))
+                                      'number': number,
+                                      'context': context}))
 
 
 @register.simple_tag(takes_context=True)
