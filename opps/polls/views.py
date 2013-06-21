@@ -180,6 +180,9 @@ class PollDetail(DetailView):
         self.object = self.get_object()
         context = self.get_context_data(**kwargs)
 
+        if self.object.channel:
+            context['channel'] = self.object.channel
+
         # check if is_closed or not published
         # to deny votes
         if not self.object.is_opened or not self.object.published:
