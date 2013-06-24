@@ -15,7 +15,10 @@ class PollIndex(SearchIndex, Indexable):
     def get_updated_field(self):
         return 'date_update'
 
-    def index_queryset(self):
-        return Poll.objects.filter(
+    def get_model(self):
+        return Poll
+
+    def index_queryset(self, using=None):
+        return self.get_model().objects.filter(
             date_available__lte=datetime.now(),
             published=True)
