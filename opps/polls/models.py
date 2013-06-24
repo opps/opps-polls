@@ -56,12 +56,14 @@ class Poll(Publishable, Slugged):
         'channels.Channel',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        verbose_name=_(u'Channel'),
     )
     posts = models.ManyToManyField(
         'articles.Post', null=True, blank=True,
         related_name='poll_post',
-        through='PollPost'
+        through='PollPost',
+        verbose_name=_(u'Posts'),
     )
     main_image = models.ForeignKey(
         'images.Image',
@@ -93,6 +95,13 @@ class Poll(Publishable, Slugged):
     @property
     def cookie_name(self):
         return "opps_poll_{0}".format(self.pk)
+
+    def voted(self, request):
+        if self.cookie_name in request.COOKIES:
+            choices = request.COOKIES[self.cookie_name]
+            return self.get_voted_choices(choices)
+        else:
+            return False
 
     @property
     def vote_count(self):
@@ -160,6 +169,8 @@ class Poll(Publishable, Slugged):
     class Meta:
         ordering = ['order']
         unique_together = ['site', 'slug']
+        verbose_name = _(u'Poll')
+        verbose_name_plural = _(u'Polls')
 
 
 class PollPost(models.Model):
@@ -183,12 +194,17 @@ class PollPost(models.Model):
     def __unicode__(self):
         return u"{0}-{1}".format(self.poll.slug, self.post.slug)
 
+    class Meta:
+        verbose_name = _(u'Poll Post')
+        verbose_name_plural = _(u'Polls Posts')
 
 class Choice(models.Model):
 
-    poll = models.ForeignKey('polls.Poll')
-    choice = models.CharField(max_length=255, null=False, blank=False)
-    votes = models.IntegerField(null=True, blank=True, default=0)
+    poll = models.ForeignKey('polls.Poll', verbose_name=_(u'Poll'))
+    choice = models.CharField(max_length=255, null=False, blank=False,
+                              verbose_name=_(u'Choice'))
+    votes = models.IntegerField(null=True, blank=True, default=0,
+                                verbose_name=_(u'Votes'))
     image = models.ForeignKey(
         'images.Image',
         verbose_name=_(u'Choice Image'),
@@ -214,6 +230,8 @@ class Choice(models.Model):
 
     class Meta:
         ordering = ['order']
+        verbose_name = _(u'Choice')
+        verbose_name_plural = _(u'Choices')
 
 
 class PollBox(BaseBox):
@@ -222,7 +240,8 @@ class PollBox(BaseBox):
         'polls.Poll',
         null=True, blank=True,
         related_name='pollbox_polls',
-        through='polls.PollBoxPolls'
+        through='polls.PollBoxPolls',
+        verbose_name=_(u'Polls')
     )
 
     def ordered_polls(self, field='order'):
@@ -236,6 +255,10 @@ class PollBox(BaseBox):
             models.Q(pollboxpolls_polls__date_end__isnull=True)
         )
         return qs.order_by('pollboxpolls_polls__order').distinct()
+
+    class Meta:
+        verbose_name = _(u'Poll box')
+        verbose_name_plural = _(u'Poll boxes')
 
 
 class PollBoxPolls(models.Model):
@@ -286,3 +309,5 @@ class PollConfig(BaseConfig):
         permissions = (("developer", "Developer"),)
         unique_together = ("key_group", "key", "site",
                            "channel", "article", "poll")
+        verbose_name = _(u'Poll Config')
+        verbose_name_plural = _(u'Poll Configs')
