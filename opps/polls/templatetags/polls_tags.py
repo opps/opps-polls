@@ -16,6 +16,7 @@ def is_voted(context, poll):
     except:
         return 0
 
+
 @register.simple_tag(takes_context=True)
 def get_paginated(context, current, pages, template_name, limit):
     try:
@@ -25,12 +26,13 @@ def get_paginated(context, current, pages, template_name, limit):
         pagination = {}
 
         if has_more:
-            pagination['left'] =  list(pages)[current:current + (limit/2)]
-            pagination['right'] = list(pages)[-((limit/2) + (1 if limit%2 else 0)):]
-            pagination['more'] = current + (limit/2) + 1
+            pagination['left'] = list(pages)[current:current + (limit / 2)]
+            pagination['right'] = list(pages)[-((limit / 2) + (1 if limit % 2
+                                                             else 0)):]
+            pagination['more'] = current + (limit / 2) + 1
         else:
             pagination = pages
-    except Exception as e:
+    except Exception:
         pagination = None
 
     t = None
@@ -38,6 +40,7 @@ def get_paginated(context, current, pages, template_name, limit):
         t = template.loader.get_template(template_name)
 
     return t.render(template.Context({'pages': pages, 'pagination': pagination, 'context': context}))
+
 
 @register.simple_tag(takes_context=True)
 def get_poll(context, slug, relation='channel', template_name=None):
