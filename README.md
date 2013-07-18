@@ -1,5 +1,7 @@
 opps.polls
 =========
+[![Build
+Status](https://travis-ci.org/opps/opps-polls.png?branch=master)](https://travis-ci.org/opps/opps-polls)
 
 Application Poll for Opps
 
