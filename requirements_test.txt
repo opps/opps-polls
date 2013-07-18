@@ -1,0 +1,6 @@
+-e git+https://github.com/opps/opps.git@stable/0.1.x#egg=opps
+flake8==2.0
+mock==1.0.1
+coverage==3.6
+django-coverage==1.2.2
+python-googleanalytics==1.0.2
