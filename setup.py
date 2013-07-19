@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 from opps import polls
 
 
-install_requires = ["opps"]
+install_requires = ["opps>=0.2"]
 
 classifiers = ["Development Status :: 4 - Beta",
                "Intended Audience :: Developers",
