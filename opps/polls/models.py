@@ -4,16 +4,12 @@ from django.db import models
 from django.db.models import Sum, Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 
-
-from taggit.managers import TaggableManager
-
-from opps.core.models import Publishable, PublishableManager, BaseBox, BaseConfig
+from opps.containers.models import Container
+from opps.core.managers import PublishableManager
 
 from .forms import MultipleChoiceForm, SingleChoiceForm
-from opps.core.models import Slugged
 
 
 app_namespace = getattr(settings, 'OPPS_POLLS_URL_NAMESPACE', 'polls')
@@ -30,9 +26,9 @@ class PollManager(PublishableManager):
         )
 
 
-class Poll(Publishable, Slugged):
+class Poll(Container):
 
-    question = models.CharField(_(u"Question"), max_length=255)
+    #question = models.CharField(_(u"Question"), max_length=255)
     multiple_choices = models.BooleanField(
         _(u"Allow multiple choices"),
         default=False
@@ -52,28 +48,12 @@ class Poll(Publishable, Slugged):
         default=False
     )
     headline = models.TextField(_(u"Headline"), blank=True)
-    channel = models.ForeignKey(
-        'channels.Channel',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        verbose_name=_(u'Channel'),
-    )
     posts = models.ManyToManyField(
         'articles.Post', null=True, blank=True,
         related_name='poll_post',
         through='PollPost',
         verbose_name=_(u'Posts'),
     )
-    main_image = models.ForeignKey(
-        'images.Image',
-        verbose_name=_(u'Poll Image'),
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name='poll_image'
-    )
-    tags = TaggableManager(blank=True, verbose_name=u'Tags')
     date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
     order = models.IntegerField(_(u"Order"), default=0)
     show_results = models.BooleanField(_(u"Show results page"), default=True)
@@ -156,19 +136,13 @@ class Poll(Publishable, Slugged):
     def search_category(self):
         return _("Poll")
 
-    @property
-    def title(self):
-        """should have a title property for search template"""
-        return self.question
-
     def __unicode__(self):
-        return self.question
+        return self.title
 
     objects = PollManager()
 
     class Meta:
         ordering = ['order']
-        unique_together = ['site', 'slug']
         verbose_name = _(u'Poll')
         verbose_name_plural = _(u'Polls')
 
@@ -197,6 +171,7 @@ class PollPost(models.Model):
     class Meta:
         verbose_name = _(u'Poll Post')
         verbose_name_plural = _(u'Polls Posts')
+
 
 class Choice(models.Model):
 
@@ -232,82 +207,3 @@ class Choice(models.Model):
         ordering = ['order']
         verbose_name = _(u'Choice')
         verbose_name_plural = _(u'Choices')
-
-
-class PollBox(BaseBox):
-
-    polls = models.ManyToManyField(
-        'polls.Poll',
-        null=True, blank=True,
-        related_name='pollbox_polls',
-        through='polls.PollBoxPolls',
-        verbose_name=_(u'Polls')
-    )
-
-    def ordered_polls(self, field='order'):
-        now = timezone.now()
-        qs = self.polls.filter(
-            published=True,
-            date_available__lte=now,
-            pollboxpolls_polls__date_available__lte=now
-        ).filter(
-            models.Q(pollboxpolls_polls__date_end__gte=now) |
-            models.Q(pollboxpolls_polls__date_end__isnull=True)
-        )
-        return qs.order_by('pollboxpolls_polls__order').distinct()
-
-    class Meta:
-        verbose_name = _(u'Poll box')
-        verbose_name_plural = _(u'Poll boxes')
-
-
-class PollBoxPolls(models.Model):
-    pollbox = models.ForeignKey(
-        'polls.PollBox',
-        null=True, blank=True,
-        on_delete=models.SET_NULL,
-        related_name='pollboxpolls_pollboxes',
-        verbose_name=_(u'Poll Box'),
-    )
-    poll = models.ForeignKey(
-        'polls.Poll',
-        null=True, blank=True,
-        on_delete=models.SET_NULL,
-        related_name='pollboxpolls_polls',
-        verbose_name=_(u'Poll'),
-    )
-    order = models.PositiveIntegerField(_(u'Order'), default=0)
-    date_available = models.DateTimeField(_(u"Date available"),
-                                          default=timezone.now, null=True)
-    date_end = models.DateTimeField(_(u"End date"), null=True, blank=True)
-
-    class Meta:
-        ordering = ('order',)
-        verbose_name = _('Poll box polls')
-        verbose_name_plural = _('Poll boxes polls')
-
-    def __unicode__(self):
-        return u"{0}-{1}".format(self.pollbox.slug, self.poll.slug)
-
-    def clean(self):
-
-        if not self.poll.published:
-            raise ValidationError(_(u'Poll not published!'))
-
-
-class PollConfig(BaseConfig):
-
-    poll = models.ForeignKey(
-        'polls.Poll',
-        null=True, blank=True,
-        on_delete=models.SET_NULL,
-        related_name='pollconfig_polls',
-        verbose_name=_(u'Poll'),
-    )
-
-    class Meta:
-        permissions = (("developer", "Developer"),)
-        unique_together = ("key_group", "key", "site",
-                           "channel", "article", "poll")
-        verbose_name = _(u'Poll Config')
-        verbose_name_plural = _(u'Poll Configs')

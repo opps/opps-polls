@@ -2,10 +2,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
-from .models import (Poll, Choice, PollPost, PollBox,
-                     PollBoxPolls, PollConfig)
-
+from .models import Poll, Choice, PollPost
 from opps.core.admin import PublishableAdmin
 from opps.core.admin import apply_opps_rules
 
@@ -49,11 +46,11 @@ class PollPostInline(admin.TabularInline):
 @apply_opps_rules('polls')
 class PollAdmin(PublishableAdmin):
     form = PollAdminForm
-    prepopulated_fields = {"slug": ["question"]}
-    list_display = ['question', 'channel', 'date_available',
+    prepopulated_fields = {"slug": ["title"]}
+    list_display = ['title', 'channel', 'date_available',
                     'date_end', 'published', 'preview_url']
     list_filter = ["date_end", "date_available", "published", "channel"]
-    search_fields = ["question", "headline"]
+    search_fields = ["title", "headline"]
     exclude = ('user',)
     raw_id_fields = ['main_image', 'channel']
     inlines = [ChoiceInline, PollPostInline]
@@ -61,7 +58,7 @@ class PollAdmin(PublishableAdmin):
 
     fieldsets = (
         (_(u'Identification'), {
-            'fields': ('site', 'question', 'slug')}),
+            'fields': ('site', 'title', 'slug')}),
         (_(u'Content'), {
             'fields': ('headline', ('main_image', 'image_thumb'), 'tags')}),
         (_(u'Relationships'), {
@@ -74,58 +71,4 @@ class PollAdmin(PublishableAdmin):
                        'show_results')}),
     )
 
-
-class PollBoxPollsInline(admin.TabularInline):
-    model = PollBoxPolls
-    fk_name = 'pollbox'
-    raw_id_fields = ['poll']
-    actions = None
-    extra = 1
-    fieldsets = [(None, {
-        'classes': ('collapse',),
-        'fields': ('poll', 'order', 'date_available', 'date_end')})]
-
-
-class PollBoxAdmin(PublishableAdmin):
-    prepopulated_fields = {"slug": ["name"]}
-    list_display = ['name', 'date_available', 'published']
-    list_filter = ['date_available', 'published']
-    inlines = [PollBoxPollsInline]
-    exclude = ('user',)
-    raw_id_fields = ['channel', 'article']
-
-    fieldsets = (
-        (_(u'Identification'), {
-            'fields': ('site', 'name', 'slug')}),
-        (_(u'Relationships'), {
-            'fields': ('channel',)}),
-        (_(u'Publication'), {
-            'classes': ('extrapretty'),
-            'fields': ('published', 'date_available')}),
-    )
-
-    def clean_ended_entries(self, request, queryset):
-        now = timezone.now()
-        for box in queryset:
-            ended = box.pollboxpolls_pollboxes.filter(
-                date_end__lt=now
-            )
-            if ended:
-                ended.delete()
-    clean_ended_entries.short_description = _(u'Clean ended polls')
-
-    actions = ('clean_ended_entries',)
-
-
-class PollConfigAdmin(PublishableAdmin):
-    list_display = ['key', 'key_group', 'channel', 'date_insert',
-                    'date_available', 'published']
-    list_filter = ["key", 'key_group', "channel", "published"]
-    search_fields = ["key", "key_group", "value"]
-    raw_id_fields = ['poll', 'channel', 'article']
-    exclude = ('user',)
-
-
 admin.site.register(Poll, PollAdmin)
-admin.site.register(PollBox, PollBoxAdmin)
-admin.site.register(PollConfig, PollConfigAdmin)
