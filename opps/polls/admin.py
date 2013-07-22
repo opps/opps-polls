@@ -6,14 +6,14 @@ from .models import Poll, Choice, PollPost
 from opps.core.admin import PublishableAdmin
 from opps.core.admin import apply_opps_rules
 
-from redactor.widgets import RedactorEditor
+from opps.core.widgets import OppsEditor
 from opps.images.generate import image_url
 
 
 class PollAdminForm(forms.ModelForm):
     class Meta:
         model = Poll
-        widgets = {"headline": RedactorEditor()}
+        widgets = {"headline": OppsEditor()}
 
 
 class ChoiceInline(admin.TabularInline):
