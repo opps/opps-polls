@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-VERSION = (0, 1, 6)
+VERSION = (0, 1, 7)
 
 __version__ = ".".join(map(str, VERSION))
 __status__ = "Development"
