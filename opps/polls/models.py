@@ -90,7 +90,7 @@ class Poll(Publishable, Slugged):
 
     @property
     def choices(self):
-        return self.choice_set.all()
+        return self.choice_set.all().order_by('-votes')
 
     @property
     def cookie_name(self):
