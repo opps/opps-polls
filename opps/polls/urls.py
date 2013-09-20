@@ -24,7 +24,7 @@ urlpatterns = patterns(
         name='result_poll'
     ),
     url(
-        r'^(?P<slug>[\w-]+)$',
+        r'^(?P<slug>[\w-]+)\.html$',
         PollDetail.as_view(),
         name='open_poll'
     ),
