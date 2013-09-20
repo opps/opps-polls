@@ -18,7 +18,7 @@ class Migration(DataMigration):
         current_redirects = set(
             Redirect.objects.values_list(
                 'old_path', flat=True
-            )[:1]
+            )
         )
         for poll in orm.Poll.objects.all():
             open_poll_path = reverse(
