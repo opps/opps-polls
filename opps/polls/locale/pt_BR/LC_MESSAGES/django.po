@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-17 14:20-0300\n"
+"POT-Creation-Date: 2014-01-29 15:45-0200\n"
 "PO-Revision-Date: 2013-04-26 18:10+0000\n"
 "Last-Translator: josene <jsene@yacows.com.br>\n"
 "Language-Team: Portuguese (Brazil) <opps-developers@googlegroups.com>\n"
@@ -20,172 +20,158 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: admin.py:35
+#: admin.py:32
 msgid "No Image"
 msgstr "Sem imagem"
 
-#: admin.py:36
+#: admin.py:33
 msgid "Thumbnail"
 msgstr "Miniatura"
 
-#: admin.py:63 admin.py:98
+#: admin.py:60
 msgid "Identification"
 msgstr "Identificação"
 
-#: admin.py:65
+#: admin.py:62
 msgid "Content"
 msgstr "Conteúdo"
 
-#: admin.py:67 admin.py:100
+#: admin.py:64
 msgid "Relationships"
 msgstr "Relacionamentos"
 
-#: admin.py:69 admin.py:102
+#: admin.py:66
 msgid "Publication"
 msgstr "Publicação"
 
-#: admin.py:115
-msgid "Clean ended polls"
-msgstr "Enquetes finalizadas"
-
-#: models.py:35
-msgid "Question"
-msgstr "Questão"
-
-#: models.py:37
+#: models.py:33
 msgid "Allow multiple choices"
 msgstr "Permite multiplas opções"
 
-#: models.py:41
+#: models.py:37
 msgid "Max number of selected choices"
 msgstr "Número máximo de opções selecionadas"
 
-#: models.py:46
+#: models.py:42
 msgid "Min number of selected choices"
 msgstr "Número mínimo de opções selecionadas"
 
-#: models.py:51
+#: models.py:47
 msgid "Display Choice images"
 msgstr "Exibir imagens das opções"
 
-#: models.py:54
+#: models.py:50
 msgid "Headline"
 msgstr "Cabeçalho"
 
-#: models.py:60
-msgid "Channel"
-msgstr "Canal"
-
-#: models.py:66
+#: models.py:55
 msgid "Posts"
 msgstr "Notícias"
 
-#: models.py:70
-msgid "Poll Image"
-msgstr "Imagem da enquete"
-
-#: models.py:77 models.py:275
+#: models.py:57
 msgid "End date"
 msgstr "Data de finalização"
 
-#: models.py:78 models.py:209 models.py:272
+#: models.py:58 models.py:191
 msgid "Order"
 msgstr "Ordem"
 
-#: models.py:79
+#: models.py:59
 msgid "Show results page"
 msgstr "Exibir página de resultados"
 
-#: models.py:150 models.py:165 models.py:180 models.py:196 models.py:270
-#: models.py:298
+#: models.py:137 models.py:146 models.py:161 models.py:178
 msgid "Poll"
 msgstr "Enquete"
 
-#: models.py:166 models.py:237
+#: models.py:147
 msgid "Polls"
 msgstr "Enquetes"
 
-#: models.py:172 models.py:191
+#: models.py:153 models.py:172
 msgid "Poll Post"
 msgstr "Posts da enquete"
 
-#: models.py:192
+#: models.py:173
 msgid "Polls Posts"
 msgstr "Posts da enquetes"
 
-#: models.py:198 models.py:226
+#: models.py:180 models.py:208
 msgid "Choice"
 msgstr "Opção"
 
-#: models.py:200
+#: models.py:182
 msgid "Votes"
 msgstr "Votos"
 
-#: models.py:203
+#: models.py:185
 msgid "Choice Image"
 msgstr "Imagem da opção"
 
-#: models.py:227
+#: models.py:209
 msgid "Choices"
 msgstr "Opções"
 
-#: models.py:253
-msgid "Poll box"
-msgstr "Box de enquete"
-
-#: models.py:254
-msgid "Poll boxes"
-msgstr "Boxes de enquete"
-
-#: models.py:263
-msgid "Poll Box"
-msgstr "Box de enquete"
-
-#: models.py:273
-msgid "Date available"
-msgstr "Data de publicação"
-
-#: models.py:279
-msgid "Poll box polls"
-msgstr "Boxes de enquete"
-
-#: models.py:280
-msgid "Poll boxes polls"
-msgstr "Boxes de enquetes"
-
-#: models.py:288
-msgid "Poll not published!"
-msgstr "Enquete não publicada!"
-
-#: models.py:305
-msgid "Poll Config"
-msgstr "Config de enquete"
-
-#: models.py:306
-msgid "Poll Configs"
-msgstr "Configs de enquete"
-
-#: views.py:186
+#: views.py:189
 msgid "Poll not opened for voting"
 msgstr "Enquete não aberta para votações"
 
-#: views.py:192
+#: views.py:195
 msgid "You already voted on this poll"
 msgstr "Você já votou nesta enquete"
 
-#: views.py:197
+#: views.py:200
 msgid "You should select at least one option"
 msgstr "Você precisa selecionar pelo menos uma opção"
 
-#: views.py:211
+#: views.py:214
 #, python-format
 msgid "You should select at least %s options"
 msgstr "Você precisa selecionar pelo menos %s opções"
 
-#: views.py:215
+#: views.py:218
 #, python-format
 msgid "You can select only %s options"
 msgstr "Você só pode selecionar %s opções"
+
+#~ msgid "Clean ended polls"
+#~ msgstr "Enquetes finalizadas"
+
+#~ msgid "Question"
+#~ msgstr "Questão"
+
+#~ msgid "Channel"
+#~ msgstr "Canal"
+
+#~ msgid "Poll Image"
+#~ msgstr "Imagem da enquete"
+
+#~ msgid "Poll box"
+#~ msgstr "Box de enquete"
+
+#~ msgid "Poll boxes"
+#~ msgstr "Boxes de enquete"
+
+#~ msgid "Poll Box"
+#~ msgstr "Box de enquete"
+
+#~ msgid "Date available"
+#~ msgstr "Data de publicação"
+
+#~ msgid "Poll box polls"
+#~ msgstr "Boxes de enquete"
+
+#~ msgid "Poll boxes polls"
+#~ msgstr "Boxes de enquetes"
+
+#~ msgid "Poll not published!"
+#~ msgstr "Enquete não publicada!"
+
+#~ msgid "Poll Config"
+#~ msgstr "Config de enquete"
+
+#~ msgid "Poll Configs"
+#~ msgstr "Configs de enquete"
 
 #~ msgid "URL"
 #~ msgstr "URL"
