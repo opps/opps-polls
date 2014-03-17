@@ -32,11 +32,20 @@ class MultipleChoiceForm(forms.Form):
         super(MultipleChoiceForm, self).__init__(*args, **kwargs)
 
         if display_choice_images:
-            choices_list = [
-                (choice.id, u"<img src='{0}' > {1}".format(
-                    choice.image.image.url if choice.image else '#', choice.choice
-                )) for choice in choices
-            ]
+            choices_list = []
+            for choice in choices:
+                img = choice.image
+                # backwards compatibility
+                if getattr(img, 'image', False):
+                    url = img.image.url
+                else:
+                    url = img.archive.url
+                choices_list.append((choice.id,
+                                     u"<img src='{0}' > {1}".format(
+                                         url if choice.image else '#',
+                                         choice.choice)
+                                     )
+                                    )
         else:
             choices_list = [(choice.id, choice.choice) for choice in choices]
 
