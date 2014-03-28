@@ -6,6 +6,13 @@ from opps.polls.models import Poll
 
 register = template.Library()
 
+@register.assignment_tag(takes_context=True)
+def poll_voted(context, poll):
+    try:
+        request = context['request']
+        return True if poll.voted(request) else False
+    except:
+        return False
 
 @register.simple_tag(takes_context=True)
 def is_voted(context, poll):
@@ -60,6 +67,31 @@ def get_poll(context, slug, template_name=None):
         return t.render(template.Context({'poll': poll, 'context': context}))
     except Poll.DoesNotExist:
         return ""
+
+@register.simple_tag(takes_context=True)
+def get_polls(context, number=5, channel_slug=None,
+                     template_name='polls/poll_related.html',
+                     exclude_slug=None,
+                     **kwargs):
+
+    polls = Poll.objects
+    if channel_slug:
+        polls = polls.filter(channel__slug=channel_slug)
+
+    if kwargs:
+        polls = polls.filter(**kwargs)
+
+    if exclude_slug:
+        polls = polls.exclude(slug=exclude_slug)
+
+    polls = polls[:number]
+
+    t = template.loader.get_template(template_name)
+
+    return t.render(template.Context({'polls': polls,
+                                      'channel_slug': channel_slug,
+                                      'number': number,
+                                      'context': context}))
 
 
 @register.simple_tag(takes_context=True)
