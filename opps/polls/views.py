@@ -60,6 +60,12 @@ class ChannelPollList(ListView):
 
         return '{0}/{1}.html'.format(domain_folder, long_slug)
 
+    def get_context_data(self, **kwargs):
+        context = super(ChannelPollList, self).get_context_data(**kwargs)
+        # channel_slug must be passed to filter status
+        context['channel_slug'] = self.kwargs['channel__long_slug'][:-1]
+        return context
+
     @property
     def queryset(self):
         self.site = get_current_site(self.request)
