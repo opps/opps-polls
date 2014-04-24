@@ -142,7 +142,7 @@ class Poll(Container):
     objects = PollManager()
 
     class Meta:
-        ordering = ['order']
+        ordering = ['-date_available']
         verbose_name = _(u'Poll')
         verbose_name_plural = _(u'Polls')
 
