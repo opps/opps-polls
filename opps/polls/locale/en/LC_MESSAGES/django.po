@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-09 18:03-0300\n"
+"POT-Creation-Date: 2015-04-13 12:02-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,116 +17,114 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:32
+#: admin.py:39
 msgid "No Image"
 msgstr ""
 
-#: admin.py:33
+#: admin.py:40
 msgid "Thumbnail"
 msgstr ""
 
-#: admin.py:60
+#: admin.py:67
 msgid "Identification"
 msgstr ""
 
-#: admin.py:62
+#: admin.py:69
 msgid "Content"
 msgstr ""
 
-#: admin.py:64
+#: admin.py:71
 msgid "Relationships"
 msgstr ""
 
-#: admin.py:66
+#: admin.py:73
 msgid "Publication"
 msgstr ""
 
-#: models.py:33
+#: models.py:32
 msgid "Allow multiple choices"
 msgstr ""
 
-#: models.py:37
+#: models.py:36
 msgid "Max number of selected choices"
 msgstr ""
 
-#: models.py:42
+#: models.py:41
 msgid "Min number of selected choices"
 msgstr ""
 
-#: models.py:47
+#: models.py:46
 msgid "Display Choice images"
 msgstr ""
 
-#: models.py:50
+#: models.py:49
 msgid "Headline"
 msgstr ""
 
-#: models.py:55
+#: models.py:54
 msgid "Posts"
 msgstr ""
 
-#: models.py:57
+#: models.py:56
 msgid "End date"
 msgstr ""
 
-#: models.py:58 models.py:191
+#: models.py:57 models.py:190
 msgid "Order"
 msgstr ""
 
-#: models.py:59
+#: models.py:58
 msgid "Show results page"
 msgstr ""
 
-#: models.py:137 models.py:146 models.py:161 models.py:178
+#: models.py:136 models.py:145 models.py:160 models.py:177
 msgid "Poll"
 msgstr ""
 
-#: models.py:147
+#: models.py:146
 msgid "Polls"
 msgstr ""
 
-#: models.py:153 models.py:172
+#: models.py:152 models.py:171
 msgid "Poll Post"
 msgstr ""
 
-#: models.py:173
+#: models.py:172
 msgid "Polls Posts"
 msgstr ""
 
-#: models.py:180 models.py:208
+#: models.py:179 models.py:207
 msgid "Choice"
 msgstr ""
 
-#: models.py:182
+#: models.py:181
 msgid "Votes"
 msgstr ""
 
-#: models.py:185
+#: models.py:184
 msgid "Choice Image"
 msgstr ""
 
-#: models.py:209
+#: models.py:208
 msgid "Choices"
 msgstr ""
 
-#: views.py:189
+#: views.py:196
 msgid "Poll not opened for voting"
 msgstr ""
 
-#: views.py:195
+#: views.py:202
 msgid "You already voted on this poll"
 msgstr ""
 
-#: views.py:200
+#: views.py:207
 msgid "You should select at least one option"
 msgstr ""
 
-#: views.py:214
-#, python-format
-msgid "You should select at least %s options"
+#: views.py:221
+msgid "You should select at least {} options"
 msgstr ""
 
-#: views.py:218
-#, python-format
-msgid "You can select only %s options"
+#: views.py:227
+msgid "You can select only {} options"
 msgstr ""
