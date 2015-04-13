@@ -8,6 +8,7 @@ from opps.core.widgets import OppsEditor
 from opps.images.generate import image_url
 
 from .models import Poll, Choice, PollPost
+from .forms import ChoiceInlineForm
 
 
 class PollAdminForm(forms.ModelForm):
@@ -19,15 +20,17 @@ class PollAdminForm(forms.ModelForm):
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
+    form = ChoiceInlineForm
     fk_name = 'poll'
     raw_id_fields = ['image']
     action = None
     extra = 1
     fieldsets = [
-        (None, {'fields': ('choice', ('image', 'image_thumb'), 'order',
-                           'votes')})
+        (None, {'fields': ('choice', ('image', 'image_thumb'), 'votes',
+                           'order')})
     ]
     readonly_fields = ['image_thumb']
+    sortable_field_name = "order"
 
     def image_thumb(self, obj):
         if obj.image:
