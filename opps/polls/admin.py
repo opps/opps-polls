@@ -2,12 +2,12 @@
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from .models import Poll, Choice, PollPost
-from opps.core.admin import PublishableAdmin
-from opps.core.admin import apply_opps_rules
 
+from opps.core.admin import PublishableAdmin, apply_opps_rules
 from opps.core.widgets import OppsEditor
 from opps.images.generate import image_url
+
+from .models import Poll, Choice, PollPost
 
 
 class PollAdminForm(forms.ModelForm):

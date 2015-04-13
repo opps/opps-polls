@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.views.generic.detail import DetailView
@@ -10,6 +9,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from opps.channels.models import Channel
+
 from .models import Poll
 from .utils import CookedResponse
 
