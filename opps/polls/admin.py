@@ -24,7 +24,7 @@ class ChoiceInline(admin.TabularInline):
     fk_name = 'poll'
     raw_id_fields = ['image']
     action = None
-    extra = 1
+    extra = 0
     fieldsets = [
         (None, {'fields': ('choice', ('image', 'image_thumb'), 'votes',
                            'order')})
