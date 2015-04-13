@@ -2,15 +2,17 @@
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from .models import Poll, Choice, PollPost
-from opps.core.admin import PublishableAdmin
-from opps.core.admin import apply_opps_rules
 
+from opps.core.admin import PublishableAdmin, apply_opps_rules
 from opps.core.widgets import OppsEditor
 from opps.images.generate import image_url
 
+from .models import Poll, Choice, PollPost
+from .forms import ChoiceInlineForm
+
 
 class PollAdminForm(forms.ModelForm):
+
     class Meta:
         model = Poll
         widgets = {"headline": OppsEditor()}
@@ -18,12 +20,17 @@ class PollAdminForm(forms.ModelForm):
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
+    form = ChoiceInlineForm
     fk_name = 'poll'
     raw_id_fields = ['image']
     action = None
-    extra = 1
-    fieldsets = [(None, {'fields': ('choice', ('image', 'image_thumb'), 'order', 'votes')})]
+    extra = 0
+    fieldsets = [
+        (None, {'fields': ('choice', ('image', 'image_thumb'), 'votes',
+                           'order')})
+    ]
     readonly_fields = ['image_thumb']
+    sortable_field_name = "order"
 
     def image_thumb(self, obj):
         if obj.image:
@@ -65,10 +72,12 @@ class PollAdmin(PublishableAdmin):
             'fields': ('channel',)}),
         (_(u'Publication'), {
             'classes': ('extrapretty'),
-            'fields': ('published', ('date_available', 'date_end'),
-                       'order', 'multiple_choices', ('min_multiple_choices',
-                       'max_multiple_choices'), 'display_choice_images',
-                       'show_results')}),
+            'fields': (
+                'published', ('date_available', 'date_end'), 'order',
+                'display_choice_images', 'show_results', 'multiple_choices',
+                ('min_multiple_choices', 'max_multiple_choices'),
+            )
+        }),
     )
 
 admin.site.register(Poll, PollAdmin)

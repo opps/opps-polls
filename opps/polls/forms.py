@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
 from django import forms
+
 from .widgets import CheckboxSelectMultiple, RadioSelect
 
 
@@ -59,3 +58,10 @@ class MultipleChoiceForm(forms.Form):
             widget=CheckboxSelectMultiple,
             choices=choices_list
         )
+
+
+class ChoiceInlineForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ChoiceInlineForm, self).__init__(*args, **kwargs)
+        self.fields['order'].widget.attrs['readonly'] = True

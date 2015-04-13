@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.views.generic.detail import DetailView
@@ -10,11 +9,13 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from opps.channels.models import Channel
+
 from .models import Poll
 from .utils import CookedResponse
 
+
 # IS THERE A BETTER WAY?
-if not 'endless_pagination' in settings.INSTALLED_APPS:
+if 'endless_pagination' not in settings.INSTALLED_APPS:
     settings.INSTALLED_APPS += (
         'endless_pagination',
     )
@@ -170,11 +171,11 @@ class PollDetail(DetailView):
         self.object = self.get_object()
         context = super(PollDetail, self).get_context_data(**kwargs)
 
-        #already voted send the voted object to template
-        #if request.COOKIES.has_key(self.object.cookie_name):
+        # When already voted send the voted object to template
         if self.object.cookie_name in request.COOKIES:
             choices = request.COOKIES[self.object.cookie_name]
-            self.voted = context['voted'] = self.object.get_voted_choices(choices)
+            self.voted = self.object.get_voted_choices(choices)
+            context['voted'] = self.voted
 
         if self.object.channel:
             context['channel'] = self.object.channel
@@ -213,15 +214,18 @@ class PollDetail(DetailView):
             except:
                 choices_ids = (request.POST.get('choices'),)
 
-            min_multiple_choices = self.object.min_multiple_choices
-            max_multiple_choices = self.object.max_multiple_choices
+            min_choices = self.object.min_multiple_choices
+            max_choices = self.object.max_multiple_choices
 
-            if min_multiple_choices and len(choices_ids) < min_multiple_choices:
-                context['error'] = _(u"You should select at least %s options") % min_multiple_choices
+            if min_choices and len(choices_ids) < min_choices:
+                error = _(u"You should select at least {} options").format(
+                    min_choices)
+                context['error'] = error
                 return self.render_to_response(context)
 
-            if max_multiple_choices and len(choices_ids) > max_multiple_choices:
-                context['error'] = _(u"You can select only %s options") % max_multiple_choices
+            if max_choices and len(choices_ids) > max_choices:
+                context['error'] = _(u"You can select only {} options").format(
+                    max_choices)
                 return self.render_to_response(context)
 
         self.voted = context['voted'] = self.object.vote(request)

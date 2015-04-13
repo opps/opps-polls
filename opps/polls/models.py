@@ -28,7 +28,6 @@ class PollManager(PublishableManager):
 
 class Poll(Container):
 
-    #question = models.CharField(_(u"Question"), max_length=255)
     multiple_choices = models.BooleanField(
         _(u"Allow multiple choices"),
         default=False
