@@ -11,6 +11,7 @@ from .models import Poll, Choice, PollPost
 
 
 class PollAdminForm(forms.ModelForm):
+
     class Meta:
         model = Poll
         widgets = {"headline": OppsEditor()}
@@ -22,7 +23,10 @@ class ChoiceInline(admin.TabularInline):
     raw_id_fields = ['image']
     action = None
     extra = 1
-    fieldsets = [(None, {'fields': ('choice', ('image', 'image_thumb'), 'order', 'votes')})]
+    fieldsets = [
+        (None, {'fields': ('choice', ('image', 'image_thumb'), 'order',
+                           'votes')})
+    ]
     readonly_fields = ['image_thumb']
 
     def image_thumb(self, obj):
@@ -65,10 +69,12 @@ class PollAdmin(PublishableAdmin):
             'fields': ('channel',)}),
         (_(u'Publication'), {
             'classes': ('extrapretty'),
-            'fields': ('published', ('date_available', 'date_end'),
-                       'order', 'multiple_choices', ('min_multiple_choices',
-                       'max_multiple_choices'), 'display_choice_images',
-                       'show_results')}),
+            'fields': (
+                'published', ('date_available', 'date_end'), 'order',
+                'display_choice_images', 'show_results', 'multiple_choices',
+                ('min_multiple_choices', 'max_multiple_choices'),
+            )
+        }),
     )
 
 admin.site.register(Poll, PollAdmin)
