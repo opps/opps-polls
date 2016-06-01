@@ -5,6 +5,7 @@ from django.db.models import Sum, Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 from opps.containers.models import Container
 from opps.core.managers import PublishableManager
@@ -130,6 +131,17 @@ class Poll(Container):
 
     def get_thumb(self):
         return self.main_image
+
+    def clean(self):
+        super(Poll, self).clean()
+        repeated = Container.objects.filter(
+            site=self.site,
+            slug=self.slug,
+        ).exclude(pk=self.pk)
+        if repeated.exists():
+            raise ValidationError(
+                _(u"Already exists a Pool with same slug and site")
+            )
 
     @property
     def search_category(self):
