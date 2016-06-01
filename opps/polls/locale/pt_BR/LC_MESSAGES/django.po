@@ -132,6 +132,10 @@ msgstr "Você precisa selecionar pelo menos {} opções"
 msgid "You can select only {} options"
 msgstr "Você só pode selecionar {} opções"
 
+#: models.py:143
+msgid "Already exists a Pool with same slug and site"
+msgstr "Já existe uma Enquete com a mesma slug e site"
+
 #~ msgid "Clean ended polls"
 #~ msgstr "Enquetes finalizadas"
 
